@@ -5,9 +5,9 @@ classdef PlayerState
     
     properties
         player      % int
-        actions     % int
-        buys        % int
-        coins       % int
+        actions;    % int
+        buys;       % int
+        coins;      % int
         hand        % tuple in Python, maybe a character array?
         drawpile    % tuple in Python, maybe a character array?
         discard     % tuple in Python, maybe a character array?
@@ -15,29 +15,20 @@ classdef PlayerState
     end
     
     methods
-        
-        function obj = change(delta_actions, delta_buys, delta_cards, delta_coins)
-            %Change the number of actions, buys, cards, or coins available
-            %on this turn.
-            
-            if delta_actions > 0
-                obj.actions = obj.actions + delta_actions;
-            end
-            
-            if delta_buys > 0
-                obj.buys = obj.buys + delta_buys;
-            end
-            
-            if delta_cards > 0
-                obj.cards = obj.cards + delta_cards;
-            end
-            
-            if delta_coins > 0
-                obj.coins = obj.coins + delta_coins;
-            end
-            
+        function obj = PlayerState(player,actions,buys,coins,hand,drawpile,discard,tableau)
+            %PLAYERSTATE Construct an instance of this class
+            %   Detailed explanation goes here
+            obj.player = player;
+            obj.actions = actions;
+            obj.buys = buys;
+            obj.coins = coins;
+            obj.hand = hand;
+            obj.drawpile = drawpile;
+            obj.discard = discard;
+            obj.tableau = tableau;
         end
         
     end
+    
 end
 
