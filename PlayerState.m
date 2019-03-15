@@ -1,4 +1,4 @@
-classdef PlayerState
+classdef PlayerState < handle
     % From dominiate-python repository:
     % "A PlayerState represents all the game state that is particular to a
     % player, including the number of actions, buys, and +coins they have.
@@ -26,6 +26,10 @@ classdef PlayerState
 %             obj.drawpile = drawpile;
 %             obj.discard = discard;
 %             obj.tableau = tableau;
+        end
+        
+        function change(obj,delta_actions)
+            obj.actions = obj.actions + delta_actions;
         end
         
     end
