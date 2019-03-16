@@ -62,7 +62,28 @@ classdef PlayerState < handle
         end
         
         
+%         function draw(obj,n)
+%            if length 
+%             
+%         end
         
+        
+        function next_turn(obj)
+            % First, discard everything. Then get 5 cards, 1 action, and 1
+            % buy
+            Discard = obj.discard;
+            Hand = obj.hand;
+            Tableau = obj.tableau;
+            
+            obj.discard = [Discard,Hand,Tableau];
+            
+            obj.actions = 1;
+            obj.buys = 1;
+            obj.coins = 0;
+            
+%             obj.draw(5); % ADD DRAW FUNCTION LATER
+            
+        end
         
 %         function isactionable = actionable(obj)
 %             % Are there any actions left to take with this hand?
@@ -76,15 +97,6 @@ classdef PlayerState < handle
 %             % Decreasing the number of actions available is handled in
 %             % play_action function
             
-            
-        
-%         NEED TO UNDERSTAND HOW DRAW FUNCTION WORKS MORE BEFORE
-%         IMPLEMENTING
-%         function draw(obj,n)
-%             % Returns a new PlayerState in which n cards have been drawn
-%             % (shuffling if necessary)
-%             if length(obj.drawpile) >= n
-%                 obj.hand
         
 %         NEED TO MAKE THIS SYNTAX MORE MATLAB-FRIENDLY
 %         function totalcoins = hand_value(obj)
