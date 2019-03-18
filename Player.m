@@ -5,7 +5,7 @@ classdef Player < handle
     
     properties
         player;           % int
-        actions     = 0;  % int
+        actions     = 1;  % int
         buys        = 1;  % int
         coins       = 0;  % int
         hand        = []; % tuple in Python, maybe a character array?
@@ -81,17 +81,21 @@ classdef Player < handle
         function next_turn(obj)
             % First, discard everything. Then get 5 cards, 1 action, and 1
             % buy
-            Discard = obj.discard;
-            Hand = obj.hand;
-            Tableau = obj.tableau;
+%             Discard = obj.discard;
+%             Hand = obj.hand;
+%             Tableau = obj.tableau;
             
-            obj.discard = [Discard,Hand,Tableau];
+            % If used incorrectly, this makes the discard and hand
+            % properties grow when they shouldn't. Rewrite so the discard
+            % doesn't grow absurdly
+            obj.discard = [obj.discard,obj.hand,obj.tableau];
+%             obj.discard = [Discard,Hand,Tableau];
             
             obj.actions = 1;
             obj.buys = 1;
             obj.coins = 0;
             
-%             obj.draw(5); % ADD DRAW FUNCTION LATER
+            obj.draw(5); % ADD DRAW FUNCTION LATER
             
         end
         
@@ -101,27 +105,76 @@ classdef Player < handle
             Discard = obj.discard;
             obj.discard = [Discard,card];
         end
+                    
+        
+        function trash_card(obj,card)
+            % Remove a card from the game
+            
+            % Get index of card in hand (could find multiple)
+            Hand = obj.hand;
+            index = find(Hand == card);
+            
+            n = length(Hand);
+            
+            % Trash the first instance of card if multiple
+            cardloc = index(1);
+            if cardloc == 1
+                Hand = Hand(2:n);
+            elseif index(1) == n
+                Hand = Hand(1:(n-1));
+            else
+                Hand = [Hand(1:cardloc-1),Hand((cardloc+1),n)];
+            end
+            
+            obj.hand = Hand;
+        end
+        
+        
+        function discard_card(obj,card)
+            % Discard a single card from the hand
+            Hand = obj.hand;
+            Discard = obj.discard;
+            index = find(Hand == card);
+            
+            n = length(Hand);
+            
+            cardloc = index(1);
+            if cardloc == 1
+                Hand = Hand(2:n);
+            elseif index(1) == n
+                Hand = Hand(1:(n-1));
+            else
+                Hand = [Hand(1:cardloc-1),Hand((cardloc+1),n)];
+            end
+            
+            obj.hand = Hand;
+            Discard = [Discard,card];
+            obj.discard = Discard;
+        end
         
         
         function play_card(obj,card)
-            % Play a card from the hand into the tableau.
-            %
-            % Decreasing the number of actions available is handled in
-            % play_action(card).
-           
-            % Get the index of the card in the hand property
+            % Play a card from the hand into the tableau. Decreasing the
+            % number of actions available is handled in play_action.
+            Hand = obj.hand;
+            index = find(Hand == card);
             
-            % Redefine the hand property so it doesn't include the card
-            % being played
+            % Remove the card from hand
+            cardloc = index(1);
+            if cardloc == 1
+                Hand = Hand(2:n);
+            elseif index(1) == n
+                Hand = Hand(1:(n-1));
+            else
+                Hand = [Hand(1:cardloc-1),Hand((cardloc+1),n)];
+            end
+            obj.hand = Hand;
             
-            % Add the card being played to the tableau
+            % Put the card into the tableau
             Tableau = obj.tableau;
-            obj.tableau = [Tableau, card];
-            
+            Tableau = [Tableau,card];
+            obj.tableau = Tableau;
         end
-            
-            
-        
         
 %         function gain_cards(obj,cards)
 %             % Gain multiple cards
