@@ -1,4 +1,4 @@
-classdef PlayerState < handle
+classdef Player < handle
     % From dominiate-python repository:
     % "A PlayerState represents all the game state that is particular to a
     % player, including the number of actions, buys, and +coins they have.
@@ -15,7 +15,7 @@ classdef PlayerState < handle
     end
     
     methods
-        function obj = PlayerState(player)
+        function obj = Player(player)
             %PLAYERSTATE Construct an instance of this class
             obj.player = player;    % Initialize with an integer that indicates the player number
         end
@@ -84,6 +84,42 @@ classdef PlayerState < handle
 %             obj.draw(5); % ADD DRAW FUNCTION LATER
             
         end
+        
+        
+        function gain(obj,card)
+            % Gain a single card
+            Discard = obj.discard;
+            obj.discard = [Discard,card];
+        end
+        
+        
+        function play_card(obj,card)
+            % Play a card from the hand into the tableau.
+            %
+            % Decreasing the number of actions available is handled in
+            % play_action(card).
+           
+            % Get the index of the card in the hand property
+            
+            % Redefine the hand property so it doesn't include the card
+            % being played
+            
+            % Add the card being played to the tableau
+            Tableau = obj.tableau;
+            obj.tableau = [Tableau, card];
+            
+        end
+            
+            
+        
+        
+%         function gain_cards(obj,cards)
+%             % Gain multiple cards
+%             Discard = obj.discard;
+%             obj.discard = [Discard,cards];
+%         end
+%         
+%         
         
 %         function isactionable = actionable(obj)
 %             % Are there any actions left to take with this hand?
