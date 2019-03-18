@@ -62,10 +62,20 @@ classdef Player < handle
         end
         
         
-%         function draw(obj,n)
-%            if length 
-%             
-%         end
+        function draw(obj,n)
+           if length(obj.drawpile) >= n
+               drawn = obj.drawpile(1:n);
+               drawpile_remaining = obj.drawpile((n+1):end);
+               Hand = obj.hand;
+               Hand = [Hand,drawn];
+               obj.hand = Hand;
+               obj.drawpile = drawpile_remaining;
+           
+           % LATER IMPLEMENT WHAT TO DO IF THERE ARE FEWER CARDS LEFT IN
+           % THE DRAWPILE THAN NEED TO BE DRAWN
+           end
+            
+        end
         
         
         function next_turn(obj)
