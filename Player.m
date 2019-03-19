@@ -104,7 +104,6 @@ classdef Player < handle
             Hand = obj.hand;
             Tableau = obj.tableau;
             
-%             obj.discard = [obj.discard,obj.hand,obj.tableau];
             obj.discard = [Discard,Hand,Tableau];
             
             % Empty hand and tableau of cards
@@ -214,6 +213,21 @@ classdef Player < handle
             Tableau = obj.tableau;
             Tableau = [Tableau,card];
             obj.tableau = Tableau;
+        end
+        
+        
+        function play_action(obj,card)
+            % Verify that the card chosen is an action card
+            if card.isAction == false
+                error('This isn''t an action card!');
+            end
+            
+            % Verify that the player still has actions left to use
+            assert(obj.actions > 0);
+            
+            % Use play_card and decrease the number of actions by 1
+            obj.play_card(card);
+            obj.change(-1,0,0);
         end
         
 %         function gain_cards(obj,cards)
