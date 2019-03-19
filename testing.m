@@ -16,8 +16,8 @@ player1
 % player1.draw(5);
 showcards(player1);
 
-disp(' ');
-disp('Discarding a copper');
-player1.discard_card(copper);
-
-showcards(player1);
+% disp(' ');
+% disp('Discarding a copper');
+% player1.discard_card(copper);
+% 
+% showcards(player1);

@@ -30,17 +30,16 @@ classdef Player < handle
             obj.coins = obj.coins + delta_coins;
         end
         
+        
         function [totalcards] = all_cards(obj)
             totalcards = obj.hand + obj.tableau + obj.drawpile + obj.discard;
         end
+        
         
         function [handsize] = hand_size(obj)
             handsize = length(obj.hand);
         end
         
-        function gain_cards(obj,cards)
-            obj.discard = obj.discard + cards;
-        end
         
         function [buysleft] = buyable(obj)
             % Can this hand still buy a card?
@@ -125,6 +124,13 @@ classdef Player < handle
             Discard = obj.discard;
             obj.discard = [Discard,card];
         end
+        
+        
+        function gain_cards(obj,cards)
+            % Gain multiple cards
+            Discard = obj.discard;
+            obj.discard = [Discard,cards];
+        end
                     
         
         function trash_card(obj,card)
@@ -133,6 +139,10 @@ classdef Player < handle
             % Get index of card in hand (could find multiple)
             Hand = obj.hand;
             index = find(Hand == card);
+            
+            if isempty(index)
+                error('Can''t trash a card that isn''t in your hand!');
+            end
             
             n = length(Hand);
             

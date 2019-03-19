@@ -12,6 +12,10 @@ classdef Card < handle
         actions = 0;
         buys = 0;
         effect = [];
+        isVictory = false;
+        isCurse = false;
+        isTreasure = false;
+        isAction = false;
         isAttack = false;
         isDefense = false;
     end
@@ -19,7 +23,7 @@ classdef Card < handle
     methods
         % Constructor method for Card class
         function obj = Card(name,cost,treasure,vp,coins,cards,actions,buys,...
-                effect,isAttack,isDefense)
+                effect,isVictory,isCurse,isTreasure,isAction,isAttack,isDefense)
             %UNTITLED3 Construct an instance of this class
             %   Detailed explanation goes here
             
@@ -33,6 +37,10 @@ classdef Card < handle
                 obj.actions = actions;
                 obj.buys = buys;
                 obj.effect = effect;
+                obj.isVictory = isVictory;
+                obj.isCurse = isCurse;
+                obj.isTreasure = isTreasure;
+                obj.isAction = isAction;
                 obj.isAttack = isAttack;
                 obj.isDefense = isDefense;
             else
