@@ -65,43 +65,66 @@ classdef Player < handle
         
         
         function draw(obj,n)
-           if length(obj.drawpile) >= n
-               drawn = obj.drawpile(1:n);
-               drawpile_remaining = obj.drawpile((n+1):end);
-               Hand = obj.hand;
-               Hand = [Hand,drawn];
-               obj.hand = Hand;
-               obj.drawpile = drawpile_remaining;
-               
-           else
-               % Shuffle the discard pile
-               Discard = obj.discard;
-               n = numel(Discard);
-               ii = randperm(n);
-               Discard_shuffled = Discard(ii);
-               
-               % Append the shuffled discard pile to the draw pile
-               Drawpile = obj.drawpile;
-               Drawpile = [Drawpile,Discard_shuffled];
-               obj.drawpile = Drawpile;
-               
-               % Clear the discard
-               obj.discard = [];
-               
-%                % Draw the desired number of cards
+           
+            if length(obj.drawpile) < n
+                % Shuffle the discard pile
+                Discard = obj.discard;
+                N = numel(Discard);
+                ii = randperm(N);
+                Discard_shuffled = Discard(ii);
+                
+                % Append the shuffled discard pile to the draw pile
+                Drawpile = obj.drawpile;
+                Drawpile = [Drawpile,Discard_shuffled];
+                obj.drawpile = Drawpile;
+                
+                % Clear the discard
+                obj.discard = [];
+            end
+           
+            % THIS SECTION WORKS AS EXPECTED
+            drawn = obj.drawpile(1:n);
+            drawpile_remaining = obj.drawpile((n+1):end);
+            Hand = obj.hand;
+            Hand = [Hand,drawn];
+            obj.hand = Hand;
+            obj.drawpile = drawpile_remaining;
+            
+            
+%             if length(obj.drawpile) >= n
 %                drawn = obj.drawpile(1:n);
 %                drawpile_remaining = obj.drawpile((n+1):end);
 %                Hand = obj.hand;
 %                Hand = [Hand,drawn];
 %                obj.hand = Hand;
 %                obj.drawpile = drawpile_remaining;
-               
-               
-               
-           end
-           % LATER IMPLEMENT WHAT TO DO IF THERE ARE FEWER CARDS LEFT IN
-           % THE DRAWPILE THAN NEED TO BE DRAWN
-           
+%                
+%            else
+%                % Shuffle the discard pile
+%                Discard = obj.discard;
+%                n = numel(Discard);
+%                ii = randperm(n);
+%                Discard_shuffled = Discard(ii);
+%                
+%                % Append the shuffled discard pile to the draw pile
+%                Drawpile = obj.drawpile;
+%                Drawpile = [Drawpile,Discard_shuffled];
+%                obj.drawpile = Drawpile;
+%                
+%                % Clear the discard
+%                obj.discard = [];
+%                
+% %                % Draw the desired number of cards
+% %                drawn = obj.drawpile(1:n);
+% %                drawpile_remaining = obj.drawpile((n+1):end);
+% %                Hand = obj.hand;
+% %                Hand = [Hand,drawn];
+% %                obj.hand = Hand;
+% %                obj.drawpile = drawpile_remaining;
+%                
+%                
+%                
+%            end           
             
         end
         
