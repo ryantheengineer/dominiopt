@@ -107,8 +107,9 @@ classdef Player < handle
 %             obj.discard = [obj.discard,obj.hand,obj.tableau];
             obj.discard = [Discard,Hand,Tableau];
             
-            % Empty hand of cards
+            % Empty hand and tableau of cards
             obj.hand = [];
+            obj.tableau = [];
             
             obj.actions = 1;
             obj.buys = 1;
@@ -192,6 +193,10 @@ classdef Player < handle
             % number of actions available is handled in play_action.
             Hand = obj.hand;
             index = find(Hand == card);
+            if isempty(index)
+                error('Can''t play a card that isn''t in your hand!');
+            end
+            n = length(Hand);
             
             % Remove the card from hand
             cardloc = index(1);
@@ -200,8 +205,9 @@ classdef Player < handle
             elseif index(1) == n
                 Hand = Hand(1:(n-1));
             else
-                Hand = [Hand(1:cardloc-1),Hand((cardloc+1),n)];
+                Hand = [Hand(1:(cardloc-1)),Hand((cardloc+1),n)];
             end
+            
             obj.hand = Hand;
             
             % Put the card into the tableau
@@ -223,12 +229,6 @@ classdef Player < handle
 %             if obj.actions > 0 && 
 %             end
 %         end
-        
-%         NEED TO FIGURE OUT THIS AND PLAY_ACTION FUNCTIONS
-%         function play_card(obj,card)
-%             % Play a card from the hand into the tableau.
-%             % Decreasing the number of actions available is handled in
-%             % play_action function
             
         
 %         NEED TO MAKE THIS SYNTAX MORE MATLAB-FRIENDLY
