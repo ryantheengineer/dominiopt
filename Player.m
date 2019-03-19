@@ -8,10 +8,10 @@ classdef Player < handle
         actions     = 1;  % int
         buys        = 1;  % int
         coins       = 0;  % int
-        hand        = []; % tuple in Python, maybe a character array?
-        drawpile    = []; % tuple in Python, maybe a character array?
-        discard     = []; % tuple in Python, maybe a character array?
-        tableau     = []; % tuple in Python, maybe a character array?       
+        hand        = []; % card array
+        drawpile    = []; % card array
+        discard     = []; % card array
+        tableau     = []; % card array
     end
     
     methods
@@ -48,7 +48,7 @@ classdef Player < handle
         end
         
         
-        function initialize_drawpile(obj,firstcards)
+        function initialize(obj,firstcards)
             % Initialize with 7 Copper and 3 Estate cards. firstcards must
             % be a 1x2 array with copper first and estate second.
             drawpile_0 = repelem(firstcards,[7,3]);
@@ -58,6 +58,8 @@ classdef Player < handle
             ii = randperm(n);
             drawpile_0 = drawpile_0(ii);
             obj.drawpile = drawpile_0;
+            
+            obj.draw(5);
             
         end
         
@@ -70,10 +72,25 @@ classdef Player < handle
                Hand = [Hand,drawn];
                obj.hand = Hand;
                obj.drawpile = drawpile_remaining;
-           
+               
+           else
+               % Shuffle the discard and append it to the drawpile, after
+               % any cards that might be remaining
+               Discard = obj.discard;
+               n = numel(Discard);
+               ii = randperm(n);
+               Discard_shuffled = Discard(ii);
+               Drawpile = obj.drawpile;
+               Drawpile = [Drawpile,Discard_shuffled];
+               obj.drawpile = Drawpile;
+               
+               % Clear the discard
+               obj.discard = [];
+               
+           end
            % LATER IMPLEMENT WHAT TO DO IF THERE ARE FEWER CARDS LEFT IN
            % THE DRAWPILE THAN NEED TO BE DRAWN
-           end
+           
             
         end
         
@@ -81,15 +98,17 @@ classdef Player < handle
         function next_turn(obj)
             % First, discard everything. Then get 5 cards, 1 action, and 1
             % buy
-%             Discard = obj.discard;
-%             Hand = obj.hand;
-%             Tableau = obj.tableau;
+            Discard = obj.discard;
+            Hand = obj.hand;
+            Tableau = obj.tableau;
             
             % If used incorrectly, this makes the discard and hand
             % properties grow when they shouldn't. Rewrite so the discard
             % doesn't grow absurdly
-            obj.discard = [obj.discard,obj.hand,obj.tableau];
-%             obj.discard = [Discard,Hand,Tableau];
+%             obj.discard = [obj.discard,obj.hand,obj.tableau];
+            obj.discard = [Discard,Hand,Tableau];
+            
+            obj.hand = [];
             
             obj.actions = 1;
             obj.buys = 1;
@@ -136,15 +155,19 @@ classdef Player < handle
             Discard = obj.discard;
             index = find(Hand == card);
             
+            if isempty(index)
+                error('Can''t discard a card that isn''t in your hand!');
+            end
+            
             n = length(Hand);
             
             cardloc = index(1);
             if cardloc == 1
                 Hand = Hand(2:n);
-            elseif index(1) == n
+            elseif cardloc == n
                 Hand = Hand(1:(n-1));
             else
-                Hand = [Hand(1:cardloc-1),Hand((cardloc+1),n)];
+                Hand = [Hand(1:(cardloc-1)),Hand((cardloc+1):n)];
             end
             
             obj.hand = Hand;
