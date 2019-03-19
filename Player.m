@@ -88,43 +88,7 @@ classdef Player < handle
             Hand = obj.hand;
             Hand = [Hand,drawn];
             obj.hand = Hand;
-            obj.drawpile = drawpile_remaining;
-            
-            
-%             if length(obj.drawpile) >= n
-%                drawn = obj.drawpile(1:n);
-%                drawpile_remaining = obj.drawpile((n+1):end);
-%                Hand = obj.hand;
-%                Hand = [Hand,drawn];
-%                obj.hand = Hand;
-%                obj.drawpile = drawpile_remaining;
-%                
-%            else
-%                % Shuffle the discard pile
-%                Discard = obj.discard;
-%                n = numel(Discard);
-%                ii = randperm(n);
-%                Discard_shuffled = Discard(ii);
-%                
-%                % Append the shuffled discard pile to the draw pile
-%                Drawpile = obj.drawpile;
-%                Drawpile = [Drawpile,Discard_shuffled];
-%                obj.drawpile = Drawpile;
-%                
-%                % Clear the discard
-%                obj.discard = [];
-%                
-% %                % Draw the desired number of cards
-% %                drawn = obj.drawpile(1:n);
-% %                drawpile_remaining = obj.drawpile((n+1):end);
-% %                Hand = obj.hand;
-% %                Hand = [Hand,drawn];
-% %                obj.hand = Hand;
-% %                obj.drawpile = drawpile_remaining;
-%                
-%                
-%                
-%            end           
+            obj.drawpile = drawpile_remaining;         
             
         end
         
