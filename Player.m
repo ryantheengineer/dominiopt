@@ -74,12 +74,13 @@ classdef Player < handle
                obj.drawpile = drawpile_remaining;
                
            else
-               % Shuffle the discard and append it to the drawpile, after
-               % any cards that might be remaining
+               % Shuffle the discard pile
                Discard = obj.discard;
                n = numel(Discard);
                ii = randperm(n);
                Discard_shuffled = Discard(ii);
+               
+               % Append the shuffled discard pile to the draw pile
                Drawpile = obj.drawpile;
                Drawpile = [Drawpile,Discard_shuffled];
                obj.drawpile = Drawpile;
@@ -87,12 +88,27 @@ classdef Player < handle
                % Clear the discard
                obj.discard = [];
                
+%                % Draw the desired number of cards
+%                drawn = obj.drawpile(1:n);
+%                drawpile_remaining = obj.drawpile((n+1):end);
+%                Hand = obj.hand;
+%                Hand = [Hand,drawn];
+%                obj.hand = Hand;
+%                obj.drawpile = drawpile_remaining;
+               
+               
+               
            end
            % LATER IMPLEMENT WHAT TO DO IF THERE ARE FEWER CARDS LEFT IN
            % THE DRAWPILE THAN NEED TO BE DRAWN
            
             
         end
+        
+        % CREATE FUNCTION HERE THAT DISCARDS ENTIRE HAND?
+%         function discard_hand(obj)
+%             
+%         end
         
         
         function next_turn(obj)
@@ -102,19 +118,17 @@ classdef Player < handle
             Hand = obj.hand;
             Tableau = obj.tableau;
             
-            % If used incorrectly, this makes the discard and hand
-            % properties grow when they shouldn't. Rewrite so the discard
-            % doesn't grow absurdly
 %             obj.discard = [obj.discard,obj.hand,obj.tableau];
             obj.discard = [Discard,Hand,Tableau];
             
+            % Empty hand of cards
             obj.hand = [];
             
             obj.actions = 1;
             obj.buys = 1;
             obj.coins = 0;
             
-            obj.draw(5); % ADD DRAW FUNCTION LATER
+            obj.draw(5);
             
         end
         
