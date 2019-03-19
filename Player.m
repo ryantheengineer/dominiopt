@@ -47,6 +47,28 @@ classdef Player < handle
         end
         
         
+        function [actionsleft] = actionable(obj)
+            % Are there actions left to take with this hand?
+            if obj.actions > 0
+                n = length(obj.hand);
+                numActionCards = 0;
+                for i = 1:n
+                    if obj.hand(i).isAction == true
+                        numActionCards = numActionCards + 1;
+                    end
+                end
+                if numActionCards > 0
+                    actionsleft = true;
+                end
+            else
+                actionsleft = false;
+            end
+        end
+
+        
+        
+        
+        
         function initialize(obj,firstcards)
             % Initialize with 7 Copper and 3 Estate cards. firstcards must
             % be a 1x2 array with copper first and estate second.
@@ -81,7 +103,6 @@ classdef Player < handle
                 obj.discard = [];
             end
            
-            % THIS SECTION WORKS AS EXPECTED
             drawn = obj.drawpile(1:n);
             drawpile_remaining = obj.drawpile((n+1):end);
             Hand = obj.hand;
@@ -230,26 +251,8 @@ classdef Player < handle
             obj.change(-1,0,0);
         end
         
-%         function gain_cards(obj,cards)
-%             % Gain multiple cards
-%             Discard = obj.discard;
-%             obj.discard = [Discard,cards];
-%         end
-%         
-%         
-        
-%         function isactionable = actionable(obj)
-%             % Are there any actions left to take with this hand?
-%             if obj.actions > 0 && 
-%             end
-%         end
-            
-        
-%         NEED TO MAKE THIS SYNTAX MORE MATLAB-FRIENDLY
-%         function totalcoins = hand_value(obj)
-%             % How many coins can the player spend?
-%             totalcoins = obj.coins + sum(card.treasure for card in obj.hand)
-%             end
+
+%         function 
         
     end
     
