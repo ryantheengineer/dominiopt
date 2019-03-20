@@ -1,22 +1,21 @@
-function [] = random_strategy(cards)
-    % Take in list of cards being used this game and output random strategy
-    % arrays to feed into a Strategy class constructor
-    nvictory = 0;
-    ntreasure = 0;
-    naction = 0;
+function [gain_priority,gain_cutoffs,play_priority,discard_priority,trash_priority] = random_strategy(cards)
+    % ONLY GOOD FOR GENERATING COMPLETELY NEW STRATEGIES, NOT BASED ON
+    % PREVIOUS PARENTS (MIGHT NOT BE IMPLEMENTED IN THE FINAL PROJECT, BUT
+    % USEFUL FOR TESTING GAMEPLAY WITH RANDOM STRATEGIES TO SEE IF IT
+    % BREAKS)
+    numcards = length(cards);
     
-    for i = 1:length(cards)
-        if cards(i).isVictory == true
-            nvictory = nvictory + 1;
-        elseif cards(i).isTreasure == true
-            ntreasure = ntreasure + 1;
-        elseif cards(i).isAction == true
-            naction = naction + 1;
-        else
-            error('Something is wrong with a card input');
-        end
-    end
+    % Generate integer lists 
+    gain_priority = linspace(1,numcards,numcards);
+    gain_cutoffs = linspace(1,numcards,numcards);
+    play_priority = linspace(1,numcards,numcards);
+    discard_priority = linspace(1,numcards,numcards);
+    trash_priority = linspace(1,numcards,numcards);
     
-    
+    gain_priority = shuffle(gain_priority);
+    gain_cutoffs = shuffle(gain_cutoffs);
+    play_priority = shuffle(play_priority);
+    discard_priority = shuffle(discard_priority);
+    trash_priority = shuffle(trash_priority);
 
 end
