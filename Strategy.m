@@ -8,20 +8,29 @@ classdef Strategy < handle
         ntreasure = 3;      % Number of treasure cards being used
         naction = 10;       % Number of action cards being used
         ncards = nvictory + ntreasure + naction;
-        cards = Card.empty(ncards);
+        cards = Card.empty(ncards);     % This may not be needed?
         gain_priority = zeros(ncards);      % list of unique integers that specifies the order in which to gain cards (buy or automatically get)
-        gain_cutoffs = zeros(ncards);
-        play_priority = zeros(ncards);
-        discard_priority = zeros(ncards);
-        
+        gain_cutoffs = zeros(ncards);       % priority index list for cutoffs (when to buy or not buy a card). Might need to be 2 columns instead of 1 for the 2 cutoff types
+        play_priority = zeros(ncards);      % priority index list for cards to play
+        discard_priority = zeros(ncards);   % priority index list for discarding cards
+        trash_priority = zeros(ncards);     % priority index list for trashing cards (may not implement for project to keep things simple)
         
     end
     
     methods
-        function obj = Strategy(inputArg1,inputArg2)
+        function obj = Strategy(nvictory,ntreasure,naction,cards,gain_priority,...
+                gain_cutoffs,play_priority,discard_priority,trash_priority)
             %UNTITLED Construct an instance of this class
             %   Detailed explanation goes here
-            obj.Property1 = inputArg1 + inputArg2;
+            obj.nvictory = nvictory;
+            obj.ntreasure = ntreasure;
+            obj.naction = naction;
+            obj.cards = cards;
+            obj.gain_priority = gain_priority;
+            obj.gain_cutoffs = gain_cutoffs;
+            obj.play_priority = play_priority;
+            obj.discard_priority = discard_priority;
+            obj.trash_priority = trash_priority;
         end
         
         function outputArg = method1(obj,inputArg)
