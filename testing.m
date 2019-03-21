@@ -46,6 +46,8 @@ handval_1
 strategy1.gain_priority = [1 2 3 4 5 6 7];
 
 % Cycle through priority list and buy the highest priority card first
+% NEED TO FIX SO IT RESTARTS THE PRIORITY CHECKING WHENEVER A BUY HAPPENS
+% INSTEAD OF ALWAYS GOING DOWN THE LIST, EVEN WHEN THE PLAYER IS RICH
 for i = 1:length(strategy1.gain_priority)
     if player1.buys < 1
         break
