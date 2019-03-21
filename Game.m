@@ -3,8 +3,8 @@ classdef Game < handle
     %   Detailed explanation goes here
     
     properties
-        players         = [];   % Vector of Player objects
-        strategies      = [];   % Vector of Strategy classes
+        players         = empty.Player();   % Vector of Player objects
+        strategies      = empty.Strategy();   % Vector of Strategy classes
         card_counts     % Implement a card array based on the number of players and cards chosen to play with
         turn            = 1;
         player_turn     = 1;
@@ -15,10 +15,11 @@ classdef Game < handle
     
     methods
         % Constructor method
-        function obj = Game(players)
+        function obj = Game(players,strategies)
             %UNTITLED Construct an instance of this class
             %   Detailed explanation goes here
             obj.players = players;
+            obj.strategies = strategies;
         end
         
         % NOT ENTIRELY SURE OF THE LOGIC FOR THIS FUNCTION...
