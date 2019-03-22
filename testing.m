@@ -52,12 +52,13 @@ for i = 1:length(strategy1.gain_priority)
     if player1.buys < 1
         break
     else
-        player1.buys
+        str = sprintf('Buys left: %d',player1.buys);
+        disp(str);
         handval_1
         Igain = find(strategy1.gain_priority == i);
         str = sprintf('Preferred card is: %s',cards(Igain).name);
         disp(str);
-        if handval_1 >= cards(Igain).cost
+        while handval_1 >= cards(Igain).cost
             player1.gain(cards(Igain));
             str = sprintf('BOUGHT: %s',cards(Igain).name);
             disp(str);
