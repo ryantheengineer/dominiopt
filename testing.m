@@ -27,7 +27,7 @@ strategy2 = Strategy(cards,gain_priority,gain_cutoffs,play_priority,discard_prio
 
 % (Set non-random gain strategy just to make it clear when the code works or
 % not)
-% strategy1.gain_priority = [1 2 5 3 4 9 6 7 8];
+strategy1.gain_priority = [1 2 5 3 4 9 6 7 8];
 
 %% Testing
 % Test out process of checking buys and actions and then having a player
@@ -190,7 +190,7 @@ for gamenum = 1:ngames
         disp('TIE GAME');
     end
 
-    gamesplayed = gamesplayed + 1;
+    gamesplayed = gamesplayed + 1
     
 end
 
