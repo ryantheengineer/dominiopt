@@ -117,7 +117,7 @@ while isempty(endcondition)
     
 end
 
-
+%% NEXT IMPLEMENT WITH 3 OR 4 PLAYERS TO MAKE SURE STRUCTURE WORKS!
 
 % Check final card counts and score
 cardcounts
