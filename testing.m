@@ -27,7 +27,7 @@ strategy2 = Strategy(cards,gain_priority,gain_cutoffs,play_priority,discard_prio
 
 % (Set non-random gain strategy just to make it clear when the code works or
 % not)
-% strategy1.gain_priority = [1 2 5 3 4 6 7 8 9];
+% strategy1.gain_priority = [1 2 5 3 4 9 6 7 8];
 
 %% Testing
 % Test out process of checking buys and actions and then having a player
@@ -50,7 +50,8 @@ while isempty(endcondition)
     end
 
     
-    handval_1
+%     handval_1
+    disp('PLAYER 1 TURN');
     % Cycle through priority list and buy the highest priority card first
     for i = 1:length(strategy1.gain_priority)
         if player1.buys < 1
@@ -79,6 +80,8 @@ while isempty(endcondition)
     
     
     % PLAYER 2 TAKES TURN
+    disp(' ');
+    disp('PLAYER 2 TURN');
     % Check value of hand (may need something to determine whether or not to
     % prefer playing action cards first, could be a simple binary variable)
     handval_2 = 0;
