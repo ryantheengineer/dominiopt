@@ -28,8 +28,8 @@ strategy2 = Strategy(cards,gain_priority,gain_cutoffs,play_priority,discard_prio
 
 % (Set non-random gain strategy just to make it clear when the code works or
 % not)
-strategy1.gain_priority = [1 2 15 3 4 16 5 6 7 8 9 10 11 12 13 14];
-strategy1.play_priority = [1 2 3 4 5 6 7 8 9 10];
+% strategy1.gain_priority = [1 2 15 3 4 16 5 6 7 8 9 10 11 12 13 14];
+% strategy1.play_priority = [1 2 3 4 5 6 7 8 9 10];
 
 %% Testing
 % Test out process of checking buys and actions and then having a player
@@ -37,7 +37,7 @@ strategy1.play_priority = [1 2 3 4 5 6 7 8 9 10];
 
 gameswon = 0;
 gamesplayed = 0;
-ngames = 1;
+ngames = 100;
 % Simulate ngames and determine the percentage of wins for player 1
 for gamenum = 1:ngames
     player1 = Player(1);
@@ -55,7 +55,7 @@ for gamenum = 1:ngames
     % Simulate game where people only buy stuff they can afford until the game
     % is over, and get an output for which player won
     while isempty(endcondition)
-        
+        %% PLAYER 1 TAKES TURN
         % Check if any of the cards in hand are an action, and then play
         % according to highest priority in the play_priority property of
         % the strategy
@@ -78,7 +78,7 @@ for gamenum = 1:ngames
                     chosen_action = preferred_action;
                     player1.play_action(chosen_action);
                     str = sprintf('Player 1 plays %s',chosen_action.name);
-                    disp(str);
+%                     disp(str);
 
                     delta_actions = chosen_action.actions;
                     delta_buys = chosen_action.buys;
@@ -89,8 +89,6 @@ for gamenum = 1:ngames
         end
                 
         
-        
-        % PLAYER 1 TAKES TURN
         % Check value of hand (may need something to determine whether or not to
         % prefer playing action cards first, could be a simple binary variable)
         handval_1 = 0;
@@ -114,7 +112,7 @@ for gamenum = 1:ngames
                 while (handval_1 >= cards(Igain).cost) && (player1.buys > 0) && (cardcounts(Igain) > 0)
                     player1.gain(cards(Igain));
                     str = sprintf('BOUGHT: %s',cards(Igain).name);
-                    disp(str);
+%                     disp(str);
                     % Decrement buys left, cards in piles, 
                     player1.buys = player1.buys - 1;
                     cardcounts(Igain) = cardcounts(Igain) - 1;
@@ -127,7 +125,41 @@ for gamenum = 1:ngames
         player1.next_turn;
 
 
-        % PLAYER 2 TAKES TURN
+        %% PLAYER 2 TAKES TURN
+        
+        % Check if any of the cards in hand are an action, and then play
+        % according to highest priority in the play_priority property of
+        % the strategy
+        actions_available = [];
+        for i = 1:length(strategy2.play_priority)
+            if player2.actions < 1
+                break
+            else
+                % Get index (in action card list) of preferred card to play
+                Iplay = find(strategy2.play_priority == i);
+                preferred_action = actioncards(Iplay);
+                str = sprintf('Preferred action is: %s',preferred_action.name);
+%                 disp(str);
+
+                % Check if preferred_action is in the current hand
+                cardlocs = ismember(player2.hand,preferred_action);
+                havecard = any(cardlocs);
+
+                if havecard == true
+                    chosen_action = preferred_action;
+                    player2.play_action(chosen_action);
+                    str = sprintf('Player 2 plays %s',chosen_action.name);
+%                     disp(str);
+
+                    delta_actions = chosen_action.actions;
+                    delta_buys = chosen_action.buys;
+                    delta_coins = chosen_action.coins;
+                    player2.change(delta_actions,delta_buys,delta_coins);
+                end
+            end
+        end
+        
+        
 %         disp(' ');
 %         disp('PLAYER 2 TURN');
         % Check value of hand (may need something to determine whether or not to
@@ -192,7 +224,7 @@ for gamenum = 1:ngames
         end
     end
 
-    totalscore1
+%     totalscore1
 
     totalscore2 = 0;
     for i = 1:length(player2.hand)
@@ -207,25 +239,25 @@ for gamenum = 1:ngames
             player2.drawpile(i).name;
         end
     end
-    for i = 1:length(player1.discard)
+    for i = 1:length(player2.discard)
         totalscore2 = totalscore2 + player2.discard(i).vp;
         if player2.discard(i).isVictory == true
             player2.discard(i).name;
         end
     end
 
-    totalscore2
+%     totalscore2
 
     if totalscore1 > totalscore2
-        disp('PLAYER 1 WINS!');
+%         disp('PLAYER 1 WINS!');
         gameswon = gameswon + 1;
     elseif totalscore1 < totalscore2
-        disp('PLAYER 2 WINS!');
+%         disp('PLAYER 2 WINS!');
     else
-        disp('TIE GAME');
+%         disp('TIE GAME');
     end
 
-    gamesplayed = gamesplayed + 1
+    gamesplayed = gamesplayed + 1;
     
 end
 
