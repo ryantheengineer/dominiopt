@@ -16,8 +16,9 @@ cardlist;
 % player2 = Player(2);
 % player2.initialize(firstcards);
 
-cards = [province duchy estate gold silver copper village woodcutter smithy];
-% cardcounts = [10 10 10 10 20 30 10 10 10];
+cards = [province duchy estate gold silver copper village woodcutter smithy festival market laboratory chapel cellar moat harbinger];
+actioncards = cards(7:end);
+% cardcounts = [10 10 10 10 20 30 10 10 10 10 10 10 10 10 10 10];
 
 [gain_priority,gain_cutoffs,play_priority,discard_priority,trash_priority] = random_strategy(cards);
 strategy1 = Strategy(cards,gain_priority,gain_cutoffs,play_priority,discard_priority,trash_priority);
@@ -27,7 +28,8 @@ strategy2 = Strategy(cards,gain_priority,gain_cutoffs,play_priority,discard_prio
 
 % (Set non-random gain strategy just to make it clear when the code works or
 % not)
-% strategy1.gain_priority = [1 2 5 3 4 9 6 7 8];
+strategy1.gain_priority = [1 2 15 3 4 16 5 6 7 8 9 10 11 12 13 14];
+strategy1.play_priority = [1 2 3 4 5 6 7 8 9 10];
 
 %% Testing
 % Test out process of checking buys and actions and then having a player
@@ -35,7 +37,7 @@ strategy2 = Strategy(cards,gain_priority,gain_cutoffs,play_priority,discard_prio
 
 gameswon = 0;
 gamesplayed = 0;
-ngames = 100;
+ngames = 1;
 % Simulate ngames and determine the percentage of wins for player 1
 for gamenum = 1:ngames
     player1 = Player(1);
@@ -44,7 +46,7 @@ for gamenum = 1:ngames
     player2 = Player(2);
     player2.initialize(firstcards);
 
-    cardcounts = [10 10 10 10 20 30 10 10 10];
+    cardcounts = [10 10 10 10 20 30 10 10 10 10 10 10 10 10 10 10];
     
     % 
     roundnum = 1;
@@ -53,7 +55,41 @@ for gamenum = 1:ngames
     % Simulate game where people only buy stuff they can afford until the game
     % is over, and get an output for which player won
     while isempty(endcondition)
+        
+        % Check if any of the cards in hand are an action, and then play
+        % according to highest priority in the play_priority property of
+        % the strategy
+        actions_available = [];
+        for i = 1:length(strategy1.play_priority)
+            if player1.actions < 1
+                break
+            else
+                % Get index (in action card list) of preferred card to play
+                Iplay = find(strategy1.play_priority == i);
+                preferred_action = actioncards(Iplay);
+                str = sprintf('Preferred action is: %s',preferred_action.name);
+%                 disp(str);
 
+                % Check if preferred_action is in the current hand
+                cardlocs = ismember(player1.hand,preferred_action);
+                havecard = any(cardlocs);
+
+                if havecard == true
+                    chosen_action = preferred_action;
+                    player1.play_action(chosen_action);
+                    str = sprintf('Player 1 plays %s',chosen_action.name);
+                    disp(str);
+
+                    delta_actions = chosen_action.actions;
+                    delta_buys = chosen_action.buys;
+                    delta_coins = chosen_action.coins;
+                    player1.change(delta_actions,delta_buys,delta_coins);
+                end
+            end
+        end
+                
+        
+        
         % PLAYER 1 TAKES TURN
         % Check value of hand (may need something to determine whether or not to
         % prefer playing action cards first, could be a simple binary variable)
@@ -61,7 +97,6 @@ for gamenum = 1:ngames
         for i = 1:length(player1.hand)
             handval_1 = handval_1 + player1.hand(i).treasure;
         end
-
 
     %     handval_1
 %         disp('PLAYER 1 TURN');
@@ -76,7 +111,7 @@ for gamenum = 1:ngames
                 Igain = find(strategy1.gain_priority == i);
                 str = sprintf('Preferred card is: %s',cards(Igain).name);
 %                 disp(str);
-                while (handval_1 >= cards(Igain).cost) && (player1.buys > 0)
+                while (handval_1 >= cards(Igain).cost) && (player1.buys > 0) && (cardcounts(Igain) > 0)
                     player1.gain(cards(Igain));
                     str = sprintf('BOUGHT: %s',cards(Igain).name);
 %                     disp(str);
@@ -113,7 +148,7 @@ for gamenum = 1:ngames
                 Igain = find(strategy2.gain_priority == i);
                 str = sprintf('Preferred card is: %s',cards(Igain).name);
 %                 disp(str);
-                while (handval_2 >= cards(Igain).cost) && (player2.buys > 0)
+                while (handval_2 >= cards(Igain).cost) && (player2.buys > 0)  && (cardcounts(Igain) > 0)
                     player2.gain(cards(Igain));
                     str = sprintf('BOUGHT: %s',cards(Igain).name);
 %                     disp(str);
@@ -196,9 +231,9 @@ end
 
 
 % Calculate and display win percentage
-winpercent = 100*(gameswon/gamesplayed);
+% winpercent = 100*(gameswon/gamesplayed);
 disp(' ');
-str = sprintf('PLAYER 1 WON %0.1f%% OUT OF %d GAMES PLAYED',winpercent,gamesplayed);
+str = sprintf('PLAYER 1 WON %d OUT OF %d GAMES PLAYED',gameswon,gamesplayed);
 disp(str);
 
 %% Old

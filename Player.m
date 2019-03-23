@@ -208,6 +208,13 @@ classdef Player < handle
         end
         
         
+        function display_hand(obj)
+            disp('Hand includes:');
+            for i = 1:length(obj.hand)
+                disp(obj.hand(i).name);
+            end
+        end
+        
         function play_card(obj,card)
             % Play a card from the hand into the tableau. Decreasing the
             % number of actions available is handled in play_action.
@@ -220,13 +227,18 @@ classdef Player < handle
             
             % Remove the card from hand
             cardloc = index(1);
-            if cardloc == 1
-                Hand = Hand(2:n);
-            elseif index(1) == n
-                Hand = Hand(1:(n-1));
-            else
-                Hand = [Hand(1:(cardloc-1)),Hand((cardloc+1),n)];
-            end
+            Hand(cardloc) = [];
+
+
+
+%             if cardloc == 1
+%                 Hand = Hand(2:n);
+%             elseif index(1) == n
+%                 Hand = Hand(1:(n-1));
+%             else
+%                 
+%                 Hand = [Hand(1:(cardloc-1)),Hand((cardloc+1),n)];
+%             end
             
             obj.hand = Hand;
             
