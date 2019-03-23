@@ -225,7 +225,7 @@ for gamenum = 1:ngames
         disp('TIE GAME');
     end
 
-    gamesplayed = gamesplayed + 1;
+    gamesplayed = gamesplayed + 1
     
 end
 
