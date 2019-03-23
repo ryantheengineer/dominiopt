@@ -114,7 +114,7 @@ for gamenum = 1:ngames
                 while (handval_1 >= cards(Igain).cost) && (player1.buys > 0) && (cardcounts(Igain) > 0)
                     player1.gain(cards(Igain));
                     str = sprintf('BOUGHT: %s',cards(Igain).name);
-%                     disp(str);
+                    disp(str);
                     % Decrement buys left, cards in piles, 
                     player1.buys = player1.buys - 1;
                     cardcounts(Igain) = cardcounts(Igain) - 1;
