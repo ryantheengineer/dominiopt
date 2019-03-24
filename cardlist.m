@@ -39,6 +39,7 @@ witch =         Card('Witch',     5,0,0,0,2,0,0,[],false,false,false,true,true, 
 chancellor =    Card('Chancellor',3,0,0,2,0,0,0,[],false,false,false,true,false,false);
 % feast =         Card('Feast',     4,0,0,0,0,0,0,[],false,false,false,true,false,false);
 adventurer =    Card('Adventurer',6,0,0,0,0,0,0,[],false,false,false,true,false,false);
+vassal =        Card('Vassal',    3,0,0,2,0,0,0,[],false,false,false,true,false,false);
 
 
 

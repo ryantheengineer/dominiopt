@@ -225,21 +225,10 @@ classdef Player < handle
             end
             n = length(Hand);
             
-            % Remove the card from hand
+            % Remove the card from hand (NEED TO IMPLEMENT THIS IN TRASH
+            % AND DRAW FUNCTIONS AS WELL)
             cardloc = index(1);
-            Hand(cardloc) = [];
-
-
-
-%             if cardloc == 1
-%                 Hand = Hand(2:n);
-%             elseif index(1) == n
-%                 Hand = Hand(1:(n-1));
-%             else
-%                 
-%                 Hand = [Hand(1:(cardloc-1)),Hand((cardloc+1),n)];
-%             end
-            
+            Hand(cardloc) = [];            
             obj.hand = Hand;
             
             % Put the card into the tableau
@@ -263,9 +252,77 @@ classdef Player < handle
             obj.change(-1,0,0);
         end
         
-
-%         function 
+        %%%%%%% Functions for enacting external effects from other players'
+        %%%%%%% played cards
+        function bureaucrat_effect(obj)
+            count = 0;
+            Hand = obj.hand;
+            for i = 1:length(Hand)
+                if (Hand(i).isVictory == true) && (count < 1)
+                    Drawpile = obj.drawpile;
+                    Drawpile = [obj.hand(i),Drawpile];
+                    obj.drawpile = Drawpile;
+                    obj.hand(i) = [];
+                    count = count + 1;
+                end
+            end
+        end
         
+        
+            
+        
+        function bandit_effect(obj)
+            % Draw function appends new card to the end of the hand
+            obj.draw(2);
+            Hand = obj.hand;
+            n = length(Hand);
+            
+            firstcard = Hand(n-1);
+            firstflag = false;
+            secondcard = Hand(n);
+            secondflag = false;
+            
+            first_notcopper = true;
+            second_notcopper = true;
+            
+            if firstcard == copper
+                first_notcopper = false;
+            end
+            if secondcard == copper
+                second_notcopper = false;
+            end
+            
+            
+            if firstcard.isTreasure && first_notcopper == true
+                firstflag = true;
+            end
+            if secondcard.isTreasure && second_notcopper == true
+                secondflag = true;
+            end
+            
+            if firstflag == true && secondflag == false
+                obj.trash_card(firstcard);
+            elseif firstflag == false && secondflag == true
+                obj.trash_card(secondcard);
+            elseif firstflag == true && secondflag == true
+                firstval = firstcard.treasure;
+                secondval = secondcard.treasure;
+                
+                if firstval <= secondval
+                    obj.trash_card(firstcard);
+                else
+                    obj.trash_card(secondcard);
+                end
+            end
+            
+        end
+        
+            
+            
+            
+        % Militia effects might need to be handled at the game level since
+        % it involves a discard priority list
+%         function militia_effect(obj)
     end
     
 end

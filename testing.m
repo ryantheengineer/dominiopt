@@ -28,8 +28,8 @@ strategy2 = Strategy(cards,gain_priority,gain_cutoffs,play_priority,discard_prio
 
 % (Set non-random gain strategy just to make it clear when the code works or
 % not)
-% strategy1.gain_priority = [1 2 15 3 4 16 5 6 7 8 9 10 11 12 13 14];
-% strategy1.play_priority = [1 2 3 4 5 6 7 8 9 10];
+strategy1.gain_priority = [1 2 15 3 4 16 5 6 7 8 9 10 11 12 13 14];
+strategy1.play_priority = [1 2 3 4 5 6 7 8 9 10];
 
 %% Testing
 % Test out process of checking buys and actions and then having a player
