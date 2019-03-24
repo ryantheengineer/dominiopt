@@ -112,11 +112,6 @@ classdef Player < handle
             
         end
         
-        % CREATE FUNCTION HERE THAT DISCARDS ENTIRE HAND?
-%         function discard_hand(obj)
-%             
-%         end
-        
         
         function next_turn(obj)
             % First, discard everything. Then get 5 cards, 1 action, and 1
@@ -168,14 +163,10 @@ classdef Player < handle
             n = length(Hand);
             
             % Trash the first instance of card if multiple
+            % Remove the card from hand
             cardloc = index(1);
-            if cardloc == 1
-                Hand = Hand(2:n);
-            elseif index(1) == n
-                Hand = Hand(1:(n-1));
-            else
-                Hand = [Hand(1:cardloc-1),Hand((cardloc+1),n)];
-            end
+            Hand(cardloc) = [];            
+            obj.hand = Hand;
             
             obj.hand = Hand;
         end
@@ -193,14 +184,10 @@ classdef Player < handle
             
             n = length(Hand);
             
+            % Remove the card from hand
             cardloc = index(1);
-            if cardloc == 1
-                Hand = Hand(2:n);
-            elseif cardloc == n
-                Hand = Hand(1:(n-1));
-            else
-                Hand = [Hand(1:(cardloc-1)),Hand((cardloc+1):n)];
-            end
+            Hand(cardloc) = [];            
+            obj.hand = Hand;
             
             obj.hand = Hand;
             Discard = [Discard,card];
@@ -278,18 +265,20 @@ classdef Player < handle
             n = length(Hand);
             
             firstcard = Hand(n-1);
-            firstflag = false;
+            firstflag = false;  % flag for determining whether to trash
             secondcard = Hand(n);
-            secondflag = false;
+            secondflag = false; % flag for determining whether to trash
             
-            first_notcopper = true;
-            second_notcopper = true;
+            first_notcopper = true; % flag for checking if card under consideration is a copper
+            second_notcopper = true; % flag for checking if card under consideration is a copper
             
-            if firstcard == copper
+            if strcmp(firstcard.name, 'Copper')
                 first_notcopper = false;
+%                 disp('First card is a copper');
             end
-            if secondcard == copper
+            if strcmp(secondcard.name, 'Copper')
                 second_notcopper = false;
+%                 disp('Second card is a copper');
             end
             
             
@@ -302,17 +291,24 @@ classdef Player < handle
             
             if firstflag == true && secondflag == false
                 obj.trash_card(firstcard);
+                obj.discard_card(secondcard);
             elseif firstflag == false && secondflag == true
                 obj.trash_card(secondcard);
+                obj.discard_card(firstcard);
             elseif firstflag == true && secondflag == true
                 firstval = firstcard.treasure;
                 secondval = secondcard.treasure;
                 
                 if firstval <= secondval
                     obj.trash_card(firstcard);
+                    obj.discard_card(secondcard);
                 else
                     obj.trash_card(secondcard);
+                    obj.discard_card(firstcard);
                 end
+            else
+                obj.discard_card(firstcard);
+                obj.discard_card(secondcard);
             end
             
         end
