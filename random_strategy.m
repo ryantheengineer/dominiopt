@@ -8,8 +8,7 @@ function [gain_priority,gain_cutoffs,play_priority,discard_priority,trash_priori
     % Generate integer lists 
     gain_priority = linspace(1,numcards,numcards);
     gain_cutoffs = linspace(1,numcards,numcards);
-    play_priority = linspace(1,3,3);
-%     play_priority = linspace(1,numcards,numcards);
+    play_priority = linspace(1,10,10);
     discard_priority = linspace(1,numcards,numcards);
     trash_priority = linspace(1,numcards,numcards);
     
