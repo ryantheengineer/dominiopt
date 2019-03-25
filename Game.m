@@ -10,7 +10,7 @@ classdef Game < handle
         strategies      = [];   % Vector of Strategy classes
         cards           = []; % Full list of cards in play (3 victory, 3 treasure, 10 actions)
         actioncards     = []; % 10 action cards in same order as in cards
-        card_counts     = [10 10 10 10 20 30 10 10 10 10 10 10 10 10 10 10];
+        cardcounts     = [10 10 10 10 20 30 10 10 10 10 10 10 10 10 10 10];
         round           = 1; %NOT SURE IF THIS IS NECESSARY
         % detail_flag        = false; % flag for turning on or off the
         % string outputs that describe the game
@@ -47,8 +47,8 @@ classdef Game < handle
         function [gameover] = isgameover(obj)
             % Return true if either a single pile of victory cards is gone,
             % or if any 3 other piles are gone
-            victory_endcondition = find(obj.card_counts(1:3) == 0);
-            other_endcondition = find(obj.card_counts(4:end) == 0);
+            victory_endcondition = find(obj.cardcounts(1:3) == 0);
+            other_endcondition = find(obj.cardcounts(4:end) == 0);
             
             gone_victory = length(victory_endcondition);
             gone_other = length(other_endcondition);
@@ -60,7 +60,7 @@ classdef Game < handle
             end
         end
         
-%         function card_counts_setup(players,cards)
+%         function cardcounts_setup(players,cards)
 %             numplayers = length(players);
 %             
 %         end
