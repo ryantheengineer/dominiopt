@@ -241,12 +241,15 @@ classdef Player < handle
         
         
         function [handval] = howrich(obj)
-            % Determine how much money is available for this turn (NEED TO
-            % IMPLEMENT A ROUTINE FOR CHECKING THE NUMBER OF COINS GAINED
-            % BY ACTION CARDS IN THE TABLEAU)
+            % Determine how much money is available for this turn
             handval = 0;
             for i = 1:length(obj.hand)
                 handval = handval + obj.hand(i).treasure;
+            end
+            % Check how many coins have been gained for this turn by action
+            % cards played into the tableau
+            for i = 1:length(obj.tableau)
+                handval = handval + obj.tableau(i).coins;
             end
         end
         
