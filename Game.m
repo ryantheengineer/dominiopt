@@ -88,9 +88,32 @@ classdef Game < handle
                         delta_buys = chosen_action.buys;
                         delta_coins = chosen_action.coins;
                         obj.players(playernum).change(delta_actions,delta_buys,delta_coins);
+                        
+                        % Add lines for applying other effects of action
+                        % cards here
                     end
                 end
             end
+            
+            % Choose which cards to buy and get them
+            handval = howrich(obj.players(playernum));
+            
+            for i = 1:length(obj.strategies(playernum).gain_priority)
+                if obj.players(playernum).buys < 1
+                    break
+                else
+                    Igain = obj.strategies(playernum).gain_priority == i;
+                    while (handval >= obj.cards(Igain).cost) && (obj.players(playernum).buys > 0)
+                        obj.players(playernum).gain(obj.cards(Igain));
+                        obj.players(playernum).buys = obj.players(playernum).buys - 1;
+                        obj.cardcounts(Igain) = obj.cardcounts(Igain) - 1;
+                        handval = handval - obj.cards(Igain).cost;
+                    end
+                end
+            end
+            
+            obj.players(playernum).next_turn;
+            
         end
         
         function play_round(obj)

@@ -210,10 +210,9 @@ classdef Player < handle
             if isempty(index)
                 error('Can''t play a card that isn''t in your hand!');
             end
-            n = length(Hand);
+%             n = length(Hand);
             
-            % Remove the card from hand (NEED TO IMPLEMENT THIS IN TRASH
-            % AND DRAW FUNCTIONS AS WELL)
+            % Remove the card from hand
             cardloc = index(1);
             Hand(cardloc) = [];            
             obj.hand = Hand;
