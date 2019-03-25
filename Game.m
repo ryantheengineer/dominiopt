@@ -60,10 +60,47 @@ classdef Game < handle
             end
         end
         
-%         function cardcounts_setup(players,cards)
-%             numplayers = length(players);
-%             
-%         end
+        
+        function play_turn(obj,playernum)
+            % Play a turn for a single player
+%             showcards(obj.players(playernum));
+
+            % PLAY ACTION CARDS FIRST according to action card priority
+            % list in corresponding strategy
+            Actioncards = obj.actioncards;
+            for i = 1:length(obj.strategies(playernum).play_priority)
+                if obj.players(playernum).actions < 1
+                    break
+                else
+                    Iplay = obj.strategies(playernum).play_priority == i;
+                    preferred_action = Actioncards(Iplay);
+                    
+                    cardlocs = ismember(obj.players(playernum).hand,preferred_action);
+                    havecard = any(cardlocs);
+                    
+                    if havecard == true
+                        chosen_action = preferred_action;
+                        obj.players(playernum).play_action(chosen_action);
+%                       str = sprintf('Player 1 plays %s',chosen_action.name);
+%                       disp(str);
+
+                        delta_actions = chosen_action.actions;
+                        delta_buys = chosen_action.buys;
+                        delta_coins = chosen_action.coins;
+                        obj.players(playernum).change(delta_actions,delta_buys,delta_coins);
+                    end
+                end
+            end
+        end
+        
+        function play_round(obj)
+            % Play a single round (all players take one turn)
+            numplayers = obj.num_players;
+            for i = 1:numplayers
+                obj.play_turn(i);
+            end
+        end
+        
         
 %         % NOT ENTIRELY SURE OF THE LOGIC FOR THIS FUNCTION...
 %         function State = state(obj)
