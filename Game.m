@@ -1,16 +1,25 @@
 classdef Game < handle
-    %UNTITLED Summary of this class goes here
-    %   Detailed explanation goes here
+    % Class for holding the characteristics of a specific set of strategies
+    % and players
+    
+    % NEED FUNCTION FOR PLAYING A NEW GAME, A SINGLE PLAYER TURN, AND
+    % PLAYING A ROUND. ALSO A GET FINAL SCORE MARGIN OUTPUT.
     
     properties
         players         = empty.Player();   % Vector of Player objects
         strategies      = empty.Strategy();   % Vector of Strategy classes
-        cards           = [];
-        card_counts     = []; % Implement a card array based on the number of players and cards chosen to play with
-        turn            = 1;
-        player_turn     = 1;
-        round           = 1;
-        simulated       % NOT SURE IF THIS IS NECESSARY
+        cards           = []; % Full list of cards in play (3 victory, 3 treasure, 10 actions)
+        actioncards     = []; % 10 action cards in same order as in cards
+        card_counts     = [10 10 10 10 20 30 10 10 10 10 10 10 10 10 10 10];
+        round           = 1; %NOT SURE IF THIS IS NECESSARY
+        % detail_flag        = false; % flag for turning on or off the
+        % string outputs that describe the game
+        
+        % Properties that might need to go in a simulation class
+        numgames        = 10; % Choose the number of games to play (default is 10)
+        scores          = []; % Array for holding scores from players (columns are the players and rows are the scores)
+        margins         = []; % Array for holding score margins for player 1 against the closest scoring player
+
         
     end
     
@@ -22,6 +31,34 @@ classdef Game < handle
             obj.players = players;
             obj.strategies = strategies;
             obj.cards = cards;
+            assert(length(cards) == 16);
+            obj.actioncards = cards(7:end);
+        end
+        
+        
+        function initialize_game(obj)
+            % Give all players their starting cards
+            cardlist;
+            Players = obj.players;
+            for i = 1:length(Players)
+                Players(i).initialize(firstcards);
+            end
+        end
+        
+        function [gameover] = isgameover(obj)
+            % Return true if either a single pile of victory cards is gone,
+            % or if any 3 other piles are gone
+            victory_endcondition = find(obj.card_counts(1:3) == 0);
+            other_endcondition = find(obj.card_counts(4:end) == 0);
+            
+            gone_victory = length(victory_endcondition);
+            gone_other = length(other_endcondition);
+            
+            if gone_victory >= 1 || gone_other >= 3
+                gameover = true;
+            else
+                gameover = false;
+            end
         end
         
 %         function card_counts_setup(players,cards)
@@ -29,12 +66,12 @@ classdef Game < handle
 %             
 %         end
         
-        % NOT ENTIRELY SURE OF THE LOGIC FOR THIS FUNCTION...
-        function State = state(obj)
-            % Get the game's state for the current player. Most methods
-            % that do anything interesting need to do this.
-            State = obj.players(obj.player_turn);
-        end
+%         % NOT ENTIRELY SURE OF THE LOGIC FOR THIS FUNCTION...
+%         function State = state(obj)
+%             % Get the game's state for the current player. Most methods
+%             % that do anything interesting need to do this.
+%             State = obj.players(obj.player_turn);
+%         end
         
         
         function current_play_card(obj,card)

@@ -38,7 +38,7 @@ strategy1.play_priority = [4 2 3 1 5 6 7 8 9 10];
 
 gameswon = 0;
 gamesplayed = 0;
-ngames = 2;
+ngames = 20;
 % Simulate ngames and determine the percentage of wins for player 1
 for gamenum = 1:ngames
     disp(' ');
