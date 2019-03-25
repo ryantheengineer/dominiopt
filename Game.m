@@ -6,8 +6,8 @@ classdef Game < handle
     % PLAYING A ROUND. ALSO A GET FINAL SCORE MARGIN OUTPUT.
     
     properties
-        players         = empty.Player();   % Vector of Player objects
-        strategies      = empty.Strategy();   % Vector of Strategy classes
+        players         = [];   % Vector of Player objects
+        strategies      = [];   % Vector of Strategy classes
         cards           = []; % Full list of cards in play (3 victory, 3 treasure, 10 actions)
         actioncards     = []; % 10 action cards in same order as in cards
         card_counts     = [10 10 10 10 20 30 10 10 10 10 10 10 10 10 10 10];
@@ -36,9 +36,8 @@ classdef Game < handle
         end
         
         
-        function initialize_game(obj)
+        function initialize_game(obj,firstcards)
             % Give all players their starting cards
-            cardlist;
             Players = obj.players;
             for i = 1:length(Players)
                 Players(i).initialize(firstcards);
