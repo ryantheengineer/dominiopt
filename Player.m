@@ -239,6 +239,17 @@ classdef Player < handle
             obj.change(-1,0,0);
         end
         
+        
+        function [handval] = howrich(obj)
+            % Determine how much money is available for this turn (NEED TO
+            % IMPLEMENT A ROUTINE FOR CHECKING THE NUMBER OF COINS GAINED
+            % BY ACTION CARDS IN THE TABLEAU)
+            handval = 0;
+            for i = 1:length(obj.hand)
+                handval = handval + obj.hand(i).treasure;
+            end
+        end
+        
         %%%%%%% Functions for enacting external effects from other players'
         %%%%%%% played cards
         function bureaucrat_effect(obj)
