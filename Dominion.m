@@ -5,7 +5,7 @@ function [avg_score_margin] = Dominion(ngames,players,strategies,cards,firstcard
     numplayers = length(players);
     Scores = zeros(ngames,numplayers);
     Margins = zeros(ngames,(numplayers-1));
-    maxMargins = zeros(ngames,1);
+    minMargins = zeros(ngames,1);
     
     % Load a Game object with the players, strategies, and cards
     game = Game(players,strategies,cards);
@@ -17,16 +17,17 @@ function [avg_score_margin] = Dominion(ngames,players,strategies,cards,firstcard
         Scores(i,:) = game.scores;
         Margins(i,:) = game.margins;
         if numplayers == 2
-            maxMargins(i) = Margins(i);
+            minMargins(i) = Margins(i);
         else
-            maxMargins(i) = max(Margins(i,2:end));
+            minMargins(i) = min(Margins(i,:));
         end
     end
     
+    minMargins;
     % Calculate the average score margin for the number of simulations
     % performed
     
-    avg_score_margin = mean(maxMargins);
+    avg_score_margin = median(minMargins);
     
 end
 
