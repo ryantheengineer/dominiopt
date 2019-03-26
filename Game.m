@@ -103,7 +103,7 @@ classdef Game < handle
                     break
                 else
                     Igain = obj.strategies(playernum).gain_priority == i;
-                    while (handval >= obj.cards(Igain).cost) && (obj.players(playernum).buys > 0)
+                    while (handval >= obj.cards(Igain).cost) && (obj.players(playernum).buys > 0) && (obj.cardcounts(Igain) > 0)
                         obj.players(playernum).gain(obj.cards(Igain));
                         obj.players(playernum).buys = obj.players(playernum).buys - 1;
                         obj.cardcounts(Igain) = obj.cardcounts(Igain) - 1;
@@ -125,6 +125,55 @@ classdef Game < handle
         end
         
         
+        function [NumPlayers] = num_players(obj)
+            NumPlayers = length(obj.players);
+        end
+        
+        
+        function play_game(obj,firstcards)
+            % Play a full game (play rounds until the end game condition is
+            % tripped
+            obj.initialize_game(firstcards);
+            gameover = false;
+            while gameover == false
+                obj.play_round;
+                gameover = obj.isgameover;
+            end
+        end
+        
+        
+        function get_scores(obj)
+           % Output the final scores into a row vector (columns correspond
+           % to the different players)
+           NumPlayers = obj.num_players;
+           Scores = zeros(1,NumPlayers);
+           Margins = zeros(1,(NumPlayers-1));           
+           
+           for i = 1:NumPlayers
+               % Move all cards in the player deck to one place for easy
+               % counting
+               Hand = obj.players(i).hand;
+               Discard = obj.players(i).discard;
+               Drawpile = obj.players(i).drawpile;
+               Tableau = obj.players(i).tableau;
+
+               allcards = [Hand,Discard,Drawpile,Tableau];
+               
+               for j = 1:length(allcards)
+                   Scores(i) = Scores(i) + allcards(j).vp;
+               end
+           end
+           
+           obj.scores = Scores;
+           
+           for i = 2:NumPlayers
+               Margins(i-1) = Scores(1) - Scores(i);
+           end
+           
+           obj.margins = Margins;
+            
+        end
+        
 %         % NOT ENTIRELY SURE OF THE LOGIC FOR THIS FUNCTION...
 %         function State = state(obj)
 %             % Get the game's state for the current player. Most methods
@@ -133,46 +182,44 @@ classdef Game < handle
 %         end
         
         
-        function current_play_card(obj,card)
-            % Play a card in the current state without decrementing the
-            % action count.
-            obj.replace_current_state(obj.state().play_card(card));
-        end
+%         function current_play_card(obj,card)
+%             % Play a card in the current state without decrementing the
+%             % action count.
+%             obj.replace_current_state(obj.state().play_card(card));
+%         end
         
-        function current_play_action(obj,card)
-            % This function plays an action card for the current player and
-            % decrements the action count
-            obj.replace_current_state(obj.state().play_action(card));
-        end
+%         function current_play_action(obj,card)
+%             % This function plays an action card for the current player and
+%             % decrements the action count
+%             obj.replace_current_state(obj.state().play_action(card));
+%         end
+%         
+%         
+%         function current_draw_cards(obj,n)
+%             % The current player draws n cards
+%             obj.replace_current_state(obj.state().draw(n));
+%         end
+        
+%         % NOT SURE WHERE .player COMES FROM ON THE END
+%         function current_player(obj)
+%             obj.state().player;
+%         end
         
         
-        function current_draw_cards(obj,n)
-            % The current player draws n cards
-            obj.replace_current_state(obj.state().draw(n));
-        end
         
-        % NOT SURE WHERE .player COMES FROM ON THE END
-        function current_player(obj)
-            obj.state().player;
-        end
+%         function [newgame] = replace_states(obj,newstates)
+%             % Do something with the current player's state and make a new
+%             % overall game state from it.
+%             newgame = obj.copy();
+%             newgame.playerstates = newstates;
+%         end
         
-        function [NumPlayers] = num_players(obj)
-            NumPlayers = length(obj.players);
-        end
-        
-        function [newgame] = replace_states(obj,newstates)
-            % Do something with the current player's state and make a new
-            % overall game state from it.
-            newgame = obj.copy();
-            newgame.playerstates = newstates;
-        end
-        
-        function [newgame] = replace_current_state(obj,newstate)
-            % Do something with the current player's state and make a new
-            % overall game state from it.
-            newgame = obj.copy();
-            newgame.playerstates(obj.player_turn) = newstate;
-        end
+%         function [newgame] = replace_current_state(obj,newstate)
+%             % Do something with the current player's state and make a new
+%             % overall game state from it.
+%             newgame = obj.copy();
+%             newgame.playerstates(obj.player_turn) = newstate;
+%         end
         
         % DON'T UNDERSTAND CHANGE_CURRENT_STATE FUNCTION
         

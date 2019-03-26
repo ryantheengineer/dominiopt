@@ -235,7 +235,7 @@ classdef Player < handle
             
             % Use play_card and decrease the number of actions by 1
             obj.play_card(card);
-            obj.change(-1,0,0);
+            obj.change((card.actions-1),(card.buys-1),card.coins); % NEED TO VERIFY THIS LOGIC (MIGHT BE GIVING TOO MANY ACTIONS?)
         end
         
         
@@ -245,11 +245,9 @@ classdef Player < handle
             for i = 1:length(obj.hand)
                 handval = handval + obj.hand(i).treasure;
             end
-            % Check how many coins have been gained for this turn by action
-            % cards played into the tableau
-            for i = 1:length(obj.tableau)
-                handval = handval + obj.tableau(i).coins;
-            end
+            % Add in coin values (playing actions should add coins once
+            % they're in the tableau)
+            handval = handval + obj.coins;
         end
         
         %%%%%%% Functions for enacting external effects from other players'
