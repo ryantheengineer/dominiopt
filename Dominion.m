@@ -23,11 +23,11 @@ function [avg_score_margin] = Dominion(ngames,players,strategies,cards,firstcard
         end
     end
     
-    minMargins;
+    Margins;
     % Calculate the average score margin for the number of simulations
     % performed
     
-    avg_score_margin = median(minMargins);
+    avg_score_margin = mean(minMargins);
     
 end
 
