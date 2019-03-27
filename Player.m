@@ -66,9 +66,6 @@ classdef Player < handle
         end
 
         
-        
-        
-        
         function initialize(obj,firstcards)
             % Initialize with 7 Copper and 3 Estate cards. firstcards must
             % be a 1x2 array with copper first and estate second.
@@ -86,7 +83,7 @@ classdef Player < handle
         
         
         function draw(obj,n)
-           
+            % Draw n cards from the drawpile, shuffling if necessary
             if length(obj.drawpile) < n
                 % Shuffle the discard pile
                 Discard = obj.discard;
@@ -236,6 +233,12 @@ classdef Player < handle
             % Use play_card and decrease the number of actions by 1
             obj.play_card(card);
             obj.change((card.actions-1),(card.buys-1),card.coins); % NEED TO VERIFY THIS LOGIC (MIGHT BE GIVING TOO MANY ACTIONS?)
+            
+            % Draw the number of cards called out by the cards property of
+            % the card played
+            draw_howmany = card.cards;
+            obj.draw(draw_howmany);           
+            
             
             % Apply any effects of action card based on effect property of
             % card (functions to do so will have to be defined in Player

@@ -1,4 +1,4 @@
-function [avg_score_margin] = Dominion(ngames,players,strategies,cards,firstcards)
+function [avg_score_margin,stdev_score_margin] = Dominion(ngames,players,strategies,cards,firstcards)
     %DOMINION: Create a game and simulate it ngames times, and output the
     %average score margin between the target player (index called out by
     %target_player) and the highest-scoring other player
@@ -28,6 +28,7 @@ function [avg_score_margin] = Dominion(ngames,players,strategies,cards,firstcard
     % performed
     
     avg_score_margin = mean(minMargins);
+    stdev_score_margin = std(minMargins);
     
 end
 
