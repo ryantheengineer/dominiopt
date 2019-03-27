@@ -78,9 +78,13 @@ classdef Game < handle
                     cardlocs = ismember(obj.players(playernum).hand,preferred_action);
                     havecard = any(cardlocs);
                     
+                    % If you have the preferred card in hand, play it (need
+                    % to implement checking, in case a new card has been
+                    % gained through an action card power)
                     if havecard == true
                         chosen_action = preferred_action;
                         obj.players(playernum).play_action(chosen_action);
+                        
 %                       str = sprintf('Player 1 plays %s',chosen_action.name);
 %                       disp(str);
 

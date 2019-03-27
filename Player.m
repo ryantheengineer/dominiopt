@@ -236,6 +236,16 @@ classdef Player < handle
             % Use play_card and decrease the number of actions by 1
             obj.play_card(card);
             obj.change((card.actions-1),(card.buys-1),card.coins); % NEED TO VERIFY THIS LOGIC (MIGHT BE GIVING TOO MANY ACTIONS?)
+            
+            % Apply any effects of action card based on effect property of
+            % card (functions to do so will have to be defined in Player
+            % for internal-only effects and in Game for external effects,
+            % such as attacks)
+            % maybe an internal effects function that handles all internal
+            % effects? You give it the card effect property (string) and
+            % then it chooses the proper action? But some of them require a
+            % strategy feed-in, so maybe all of these should be handled in
+            % the Game class?
         end
         
         
