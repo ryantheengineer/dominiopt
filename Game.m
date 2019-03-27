@@ -178,6 +178,62 @@ classdef Game < handle
             
         end
         
+        
+        %% Card effect actions that require a strategy input
+        function apply_effects(obj,playernum,card_played)
+            % Apply the appropriate effect based on the card effect (if
+            % there is one)
+            effect = card_played.effect;
+            
+            switch effect
+                case 'chapel_effect'
+                    obj.chapel_action(obj.players(playernum));
+                    
+                    
+                    % Add other card effects here
+            end
+            
+        end
+        
+        
+        
+        function chapel_action(obj,playernum)
+            % Trash up to 4 cards from your hand
+            trashcount = 0;
+            
+            Hand = obj.players(playernum).hand;
+            
+            for i = 1:length(obj.strategies(playernum).play_priority)
+                if trashcount > 4
+                    break
+                else
+                    Itrash = obj.strategies(playernum).trash_priority == i;
+                    preferred_trash = Hand(Itrash);
+                    
+                    cardlocs = ismember(obj.players(playernum).hand,preferred_trash);
+                    havecard = any(cardlocs);
+                    
+                    % If you have the preferred card in hand, play it (need
+                    % to implement checking, in case a new card has been
+                    % gained through an action card power)
+                    if havecard == true
+                        chosen_trash = preferred_trash;
+                        obj.players(playernum).trash_card(chosen_trash);
+                        
+                        % NOT SURE IF THIS IS WORKING; NOT SHOWING THIS
+                        % OUTPUT IN TESTDRIVE.M
+                        str = sprintf('Player trashes %s card',chosen_trash.name);
+                        disp(str);
+                        trashcount = trashcount + 1;   
+                    end
+                end
+            end
+            
+        end
+        
+        
+        
+        
 %         % NOT ENTIRELY SURE OF THE LOGIC FOR THIS FUNCTION...
 %         function State = state(obj)
 %             % Get the game's state for the current player. Most methods
