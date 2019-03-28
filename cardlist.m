@@ -10,17 +10,17 @@ silver =        Card('Silver',  3,2,0,0,0,0,0,[],false,false,true,false,false,fa
 gold =          Card('Gold',    6,3,0,0,0,0,0,[],false,false,true,false,false,false);
 
 % Action cards (simple)
-village =       Card('Village',     3,0,0,1,2,0,0,[],false,false,false,true,false,false);
-woodcutter =    Card('Woodcutter',  3,0,0,2,0,0,1,[],false,false,false,true,false,false);
-smithy =        Card('Smithy',      4,0,0,2,0,0,0,[],false,false,false,true,false,false);
-festival =      Card('Festival',    5,0,0,2,0,2,1,[],false,false,false,true,false,false);
-market =        Card('Market',      5,0,0,1,1,1,1,[],false,false,false,true,false,false);
-laboratory =    Card('Laboratory',  5,0,0,0,2,1,0,[],false,false,false,true,false,false);
+village =       Card('Village',     3,0,0,1,2,0,0,'village_effect',false,false,false,true,false,false);
+woodcutter =    Card('Woodcutter',  3,0,0,2,0,0,1,'woodcutter_effect',false,false,false,true,false,false);
+smithy =        Card('Smithy',      4,0,0,2,0,0,0,'smithy_effect',false,false,false,true,false,false);
+festival =      Card('Festival',    5,0,0,2,0,2,1,'festival_effect',false,false,false,true,false,false);
+market =        Card('Market',      5,0,0,1,1,1,1,'market_effect',false,false,false,true,false,false);
+laboratory =    Card('Laboratory',  5,0,0,0,2,1,0,'laboratory_effect',false,false,false,true,false,false);
 
 % Action cards with effects
 chapel =        Card('Chapel',    2,0,0,0,0,0,0,'chapel_effect',     false,false,false,true,false,false); % Effect implemented in Game class
 cellar =        Card('Cellar',    2,0,0,0,0,1,0,'cellar_effect',     false,false,false,true,false,false);
-moat =          Card('Moat',      2,0,0,0,2,0,0,[],                  false,false,false,true,false,true);
+moat =          Card('Moat',      2,0,0,0,2,0,0,'moat_effect',       false,false,false,true,false,true);
 harbinger =     Card('Harbinger', 3,0,0,0,1,1,0,'harbinger_effect',  false,false,false,true,false,false);
 workshop =      Card('Workshop',  3,0,0,0,0,0,0,'workshop_effect',   false,false,false,true,false,false);
 bureaucrat =    Card('Bureaucrat',4,0,0,0,0,0,0,'bureaucrat_effect', false,false,false,true,true, false);

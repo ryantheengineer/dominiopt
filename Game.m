@@ -95,6 +95,7 @@ classdef Game < handle
                         
                         % Add lines for applying other effects of action
                         % cards here
+                        obj.apply_effects(obj.players(playernum),chosen_action);
                     end
                 end
             end
@@ -187,110 +188,52 @@ classdef Game < handle
             
             switch effect
                 case 'chapel_effect'
-                    obj.chapel_action(obj.players(playernum));
-                    
-                    
-                    % Add other card effects here
+%                     obj.chapel_action(obj.players(playernum));
+                    disp('Chapel card effect happens!');
+                otherwise
+                    disp('This is what happens when another action card is played');
             end
             
         end
         
         
         
-        function chapel_action(obj,playernum)
-            % Trash up to 4 cards from your hand
-            trashcount = 0;
-            
-            Hand = obj.players(playernum).hand;
-            
-            for i = 1:length(obj.strategies(playernum).play_priority)
-                if trashcount > 4
-                    break
-                else
-                    Itrash = obj.strategies(playernum).trash_priority == i;
-                    preferred_trash = Hand(Itrash);
-                    
-                    cardlocs = ismember(obj.players(playernum).hand,preferred_trash);
-                    havecard = any(cardlocs);
-                    
-                    % If you have the preferred card in hand, play it (need
-                    % to implement checking, in case a new card has been
-                    % gained through an action card power)
-                    if havecard == true
-                        chosen_trash = preferred_trash;
-                        obj.players(playernum).trash_card(chosen_trash);
-                        
-                        % NOT SURE IF THIS IS WORKING; NOT SHOWING THIS
-                        % OUTPUT IN TESTDRIVE.M
-                        str = sprintf('Player trashes %s card',chosen_trash.name);
-                        disp(str);
-                        trashcount = trashcount + 1;   
-                    end
-                end
-            end
-            
-        end
-        
-        
-        
-        
-%         % NOT ENTIRELY SURE OF THE LOGIC FOR THIS FUNCTION...
-%         function State = state(obj)
-%             % Get the game's state for the current player. Most methods
-%             % that do anything interesting need to do this.
-%             State = obj.players(obj.player_turn);
-%         end
-        
-        
-%         function current_play_card(obj,card)
-%             % Play a card in the current state without decrementing the
-%             % action count.
-%             obj.replace_current_state(obj.state().play_card(card));
-%         end
-        
-%         function current_play_action(obj,card)
-%             % This function plays an action card for the current player and
-%             % decrements the action count
-%             obj.replace_current_state(obj.state().play_action(card));
-%         end
-%         
-%         
-%         function current_draw_cards(obj,n)
-%             % The current player draws n cards
-%             obj.replace_current_state(obj.state().draw(n));
-%         end
-        
-%         % NOT SURE WHERE .player COMES FROM ON THE END
-%         function current_player(obj)
-%             obj.state().player;
+%         function chapel_action(obj,playernum)
+%             % Trash up to 4 cards from your hand
+%             trashcount = 0;
+%             
+%             Hand = obj.players(playernum).hand;
+%             
+%             for i = 1:length(obj.strategies(playernum).play_priority)
+%                 if trashcount > 4
+%                     break
+%                 else
+%                     Itrash = obj.strategies(playernum).trash_priority == i;
+%                     preferred_trash = Hand(Itrash);
+%                     
+%                     cardlocs = ismember(obj.players(playernum).hand,preferred_trash);
+%                     havecard = any(cardlocs);
+%                     
+%                     % If you have the preferred card in hand, play it (need
+%                     % to implement checking, in case a new card has been
+%                     % gained through an action card power)
+%                     if havecard == true
+%                         chosen_trash = preferred_trash;
+%                         obj.players(playernum).trash_card(chosen_trash);
+%                         
+%                         % NOT SURE IF THIS IS WORKING; NOT SHOWING THIS
+%                         % OUTPUT IN TESTDRIVE.M
+%                         str = sprintf('Player trashes %s card',chosen_trash.name);
+%                         disp(str);
+%                         trashcount = trashcount + 1;   
+%                     end
+%                 end
+%             end
+%             
 %         end
         
         
         
-%         function [newgame] = replace_states(obj,newstates)
-%             % Do something with the current player's state and make a new
-%             % overall game state from it.
-%             newgame = obj.copy();
-%             newgame.playerstates = newstates;
-%         end
-        
-%         function [newgame] = replace_current_state(obj,newstate)
-%             % Do something with the current player's state and make a new
-%             % overall game state from it.
-%             newgame = obj.copy();
-%             newgame.playerstates(obj.player_turn) = newstate;
-%         end
-        
-        % DON'T UNDERSTAND CHANGE_CURRENT_STATE FUNCTION
-        
-        
-        
-        
-%         function outputArg = method1(obj,inputArg)
-%             %METHOD1 Summary of this method goes here
-%             %   Detailed explanation goes here
-%             outputArg = obj.Property1 + inputArg;
-%         end
     end
 end
 
