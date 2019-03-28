@@ -10,7 +10,7 @@ classdef Game < handle
         strategies      = [];   % Vector of Strategy classes
         cards           = []; % Full list of cards in play (3 victory, 3 treasure, 10 actions)
         actioncards     = []; % 10 action cards in same order as in cards
-        cardcounts     = [10 10 10 10 20 30 10 10 10 10 10 10 10 10 10 10];
+        cardcounts     = [12 12 12 10 20 30 10 10 10 10 10 10 10 10 10 10];
         round           = 1; %NOT SURE IF THIS IS NECESSARY
         % detail_flag        = false; % flag for turning on or off the
         % string outputs that describe the game
@@ -95,7 +95,7 @@ classdef Game < handle
                         
                         % Add lines for applying other effects of action
                         % cards here
-                        obj.apply_effects(obj.players(playernum),chosen_action);
+                        obj.apply_effects(playernum,chosen_action);
                     end
                 end
             end
@@ -188,52 +188,148 @@ classdef Game < handle
             
             switch effect
                 case 'chapel_effect'
-%                     obj.chapel_action(obj.players(playernum));
+                    obj.chapel_action(playernum);
                     disp('Chapel card effect happens!');
+                case 'bureaucrat_effect'
+                    disp('Bureaucrat card effect happens!');
+                    obj.bureaucrat_action(playernum)
                 otherwise
-                    disp('This is what happens when another action card is played');
+%                     disp('This is what happens when another action card is played');
+            end
+            
+        end
+        
+        function bureaucrat_action(obj,playernum)
+            % Gain a Silver onto your deck. Each other player reveals a
+            % Victory card from their hand and puts it onto their deck (or
+            % reveals a hand with no Victory cards)
+            silvercount = obj.cardcounts(5);
+            if silvercount > 0
+                obj.players(playernum).gain(obj.cards(5));
+                obj.cardcounts(5) = silvercount - 1;
+            end
+            
+            % Each other player goes through their hand to put a Victory
+            % card on top of their deck
+            NumPlayers = obj.num_players;
+            for i = 1:NumPlayers
+                if i ~= playernum
+                    victory_in_hand = 0;
+                    Hand = obj.players(i).hand;
+                    Drawpile = obj.players(i).drawpile;
+                    % Cycle through player i's hand
+                    for j = 1:length(Hand)
+                        % Check if they haven't already pulled out a
+                        % victory card
+                        if victory_in_hand < 1
+                            % Get the card in question
+                            check_card = obj.players(i).hand(j);
+                            if check_card.isVictory == true
+                                % If it's a victory card, put the card on
+                                % top of the draw pile
+                                Drawpile = [check_card,Drawpile];
+                                obj.players(i).drawpile = Drawpile;
+                                
+                                % Remove the victory card from the hand
+                                Hand(j) = [];
+                                obj.players(i).hand = Hand;
+                                victory_in_hand = 1;
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        
+            
+        
+        function chapel_action(obj,playernum)
+            % Trash up to 4 cards from your hand
+            trashcount = 0;
+            
+            Hand = obj.players(playernum).hand;
+            
+            for i = 1:length(obj.strategies(playernum).trash_priority)
+                if trashcount > 4
+                    break
+                else
+%                       (The logicical indexing appears to be off at this
+%                       point)
+                    % Get the index in the trash_priority list where the
+                    % priority is equal to i
+                    Itrash = obj.strategies(playernum).trash_priority == i;
+                    preferred_trash = obj.cards(Itrash);
+                    
+                    cardlocs = ismember(obj.players(playernum).hand,preferred_trash);
+                    havecard = any(cardlocs);
+                    
+                    % If you have the preferred card in hand, play it (need
+                    % to implement checking, in case a new card has been
+                    % gained through an action card power)
+                    if havecard == true
+                        chosen_trash = preferred_trash;
+                        obj.players(playernum).trash_card(chosen_trash);
+                        
+                        % NOT SURE IF THIS IS WORKING; NOT SHOWING THIS
+                        % OUTPUT IN TESTDRIVE.M
+                        str = sprintf('Player trashes %s card',chosen_trash.name);
+                        disp(str);
+                        trashcount = trashcount + 1;   
+                    end
+                end
             end
             
         end
         
         
-        
-%         function chapel_action(obj,playernum)
-%             % Trash up to 4 cards from your hand
-%             trashcount = 0;
-%             
-%             Hand = obj.players(playernum).hand;
-%             
-%             for i = 1:length(obj.strategies(playernum).play_priority)
-%                 if trashcount > 4
-%                     break
-%                 else
-%                     Itrash = obj.strategies(playernum).trash_priority == i;
-%                     preferred_trash = Hand(Itrash);
-%                     
-%                     cardlocs = ismember(obj.players(playernum).hand,preferred_trash);
-%                     havecard = any(cardlocs);
-%                     
-%                     % If you have the preferred card in hand, play it (need
-%                     % to implement checking, in case a new card has been
-%                     % gained through an action card power)
-%                     if havecard == true
-%                         chosen_trash = preferred_trash;
-%                         obj.players(playernum).trash_card(chosen_trash);
+        function harbinger_action(obj,playernum)
+            % Look through your discard pile. You may put a card from it
+            % onto your deck (do this according to gain_priority, with
+            % modifiers to keep from putting victory cards on top of your
+            % deck)
+            Discard = obj.players(playernum).discard;
+            Drawpile = obj.players(playernum).drawpile;
+            for i = 1:length(Discard)
+                for j = 1:length(obj.strategies(playernum).gain_priority)
+                    % Get index in cards where the preferred card, according
+                    % to gain_priority, is located
+                    Igain = obj.strategies(playernum).gain_priority == j;
+                    
+                    
+                    % WORK ON THE LOGIC HERE!!!!!
+                    
+                    
+%                     % If the preferred card is not a victory card, get it
+%                     % from the discard (gain and remove from discard)
+%                     if obj.cards(Igain).isVictory == false
+%                         % Gain the chosen card ONTO THE TOP OF THE DRAWPILE
+% %                         obj.players(playernum).gain(obj.cards(Igain));
 %                         
-%                         % NOT SURE IF THIS IS WORKING; NOT SHOWING THIS
-%                         % OUTPUT IN TESTDRIVE.M
-%                         str = sprintf('Player trashes %s card',chosen_trash.name);
-%                         disp(str);
-%                         trashcount = trashcount + 1;   
+%                         % Get index of card in hand (could find multiple)
+%                         index = find(Discard == card);
+% 
+%                         if isempty(index)
+%                             error('Can''t trash a card that isn''t in your hand!');
+%                         end
+% 
+%                         % Trash the first instance of card if multiple
+%                         % Remove the card from hand
+%                         cardloc = index(1);
+%                         Hand(cardloc) = [];            
+%                         obj.hand = Hand;
+%                         
+%                         
 %                     end
-%                 end
-%             end
-%             
-%         end
+                end
+            end
+            
+        end
+            
+            
         
         
         
-    end
+    end % END OF METHODS
+    
 end
 

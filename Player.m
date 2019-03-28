@@ -148,24 +148,25 @@ classdef Player < handle
         
         function trash_card(obj,card)
             % Remove a card from the game
-            
-            % Get index of card in hand (could find multiple)
-            Hand = obj.hand;
-            index = find(Hand == card);
-            
-            if isempty(index)
-                error('Can''t trash a card that isn''t in your hand!');
+            decklength = getdecksize(obj);
+            % Don't trash anything if you have 10 cards or less
+            if decklength > 10 
+                % Get index of card in hand (could find multiple)
+                Hand = obj.hand;
+                index = find(Hand == card);
+
+                if isempty(index)
+                    error('Can''t trash a card that isn''t in your hand!');
+                end
+
+%                 n = length(Hand);
+
+                % Trash the first instance of card if multiple
+                % Remove the card from hand
+                cardloc = index(1);
+                Hand(cardloc) = [];            
+                obj.hand = Hand;
             end
-            
-            n = length(Hand);
-            
-            % Trash the first instance of card if multiple
-            % Remove the card from hand
-            cardloc = index(1);
-            Hand(cardloc) = [];            
-            obj.hand = Hand;
-            
-            obj.hand = Hand;
         end
         
         
@@ -263,21 +264,34 @@ classdef Player < handle
             handval = handval + obj.coins;
         end
         
-        %%%%%%% Functions for enacting external effects from other players'
-        %%%%%%% played cards
-        function bureaucrat_effect(obj)
-            count = 0;
-            Hand = obj.hand;
-            for i = 1:length(Hand)
-                if (Hand(i).isVictory == true) && (count < 1)
-                    Drawpile = obj.drawpile;
-                    Drawpile = [obj.hand(i),Drawpile];
-                    obj.drawpile = Drawpile;
-                    obj.hand(i) = [];
-                    count = count + 1;
-                end
-            end
+        
+        function [decklength] = getdecksize(obj)
+            % Check how many total cards the player has in the game
+            hand_size = length(obj.hand);
+            drawpile_size = length(obj.drawpile);
+            discard_size = length(obj.discard);
+            tableau_size = length(obj.tableau);
+            
+            decklength = hand_size + drawpile_size + discard_size + tableau_size;
+            
         end
+        
+        
+%         %%%%%%% Functions for enacting external effects from other players'
+%         %%%%%%% played cards
+%         function bureaucrat_effect(obj)
+%             count = 0;
+%             Hand = obj.hand;
+%             for i = 1:length(Hand)
+%                 if (Hand(i).isVictory == true) && (count < 1)
+%                     Drawpile = obj.drawpile;
+%                     Drawpile = [obj.hand(i),Drawpile];
+%                     obj.drawpile = Drawpile;
+%                     obj.hand(i) = [];
+%                     count = count + 1;
+%                 end
+%             end
+%         end
         
         
             

@@ -5,7 +5,7 @@ clear;
 
 %% Set up cards
 cardlist;
-cards = [province duchy estate gold silver copper village woodcutter smithy festival market laboratory chapel cellar moat harbinger];
+cards = [province duchy estate gold silver copper village woodcutter smithy festival market bureaucrat chapel cellar moat harbinger];
 actioncards = [village woodcutter smithy festival market laboratory chapel cellar moat harbinger];
 
 %% Set up strategies
@@ -17,17 +17,13 @@ strategy1.play_priority = [4 2 3 1 5 6 7 8 9 10];
 [gain_priority,gain_cutoffs,play_priority,discard_priority,trash_priority] = random_strategy(cards);
 strategy2 = Strategy(cards,gain_priority,gain_cutoffs,play_priority,discard_priority,trash_priority);
 
-[gain_priority,gain_cutoffs,play_priority,discard_priority,trash_priority] = random_strategy(cards);
-strategy3 = Strategy(cards,gain_priority,gain_cutoffs,play_priority,discard_priority,trash_priority);
-
-strategies = [strategy1,strategy2,strategy3];
+strategies = [strategy1,strategy2];
 
 %% Set up players
 player1 = Player(1);
 player2 = Player(2);
-player3 = Player(3);
 
-players = [player1,player2,player3];
+players = [player1,player2];
 
 %% Set up and run game simulations
 
