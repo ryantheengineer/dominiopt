@@ -188,8 +188,8 @@ classdef Game < handle
             
             switch effect
                 case 'chapel_effect'
-                    obj.chapel_action(playernum);
                     disp('Chapel card effect happens!');
+                    obj.chapel_action(playernum);
                 case 'bureaucrat_effect'
                     disp('Bureaucrat card effect happens!');
                     obj.bureaucrat_action(playernum)

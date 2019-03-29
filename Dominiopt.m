@@ -1,4 +1,4 @@
-function [] = Dominiopt()
+function [avg_score_margin] = Dominiopt()
 % Translator function for going from genetic algorithm inputs (arrays of
 % numbers) to running the Dominion function and returning the
 % avg_score_margin. Also asks for the strategies to be used by the opposing
@@ -7,4 +7,10 @@ function [] = Dominiopt()
 % OR IN AN EXTERNAL SCRIPT THAT MUST BE CALLED)
 
 
+
+
+
+
+
+avg_score_margin = Dominion(ngames,players,strategies,cards,firstcards);
 end
