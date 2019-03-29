@@ -12,13 +12,13 @@ classdef Strategy < handle
         gain_priority;      % list of unique integers that specifies the order in which to gain cards (buy or automatically get)
         gain_cutoffs;       % priority index list for cutoffs (when to buy or not buy a card). Might need to be 2 columns instead of 1 for the 2 cutoff types
         play_priority;      % priority index list for cards to play
-        discard_priority;   % priority index list for discarding cards
+%         discard_priority;   % priority index list for discarding cards
         trash_priority;     % priority index list for trashing cards (may not implement for project to keep things simple)
         
     end
     
     methods
-        function obj = Strategy(cards,gain_priority,gain_cutoffs,play_priority,discard_priority,trash_priority)
+        function obj = Strategy(cards,gain_priority,gain_cutoffs,play_priority,trash_priority)
             %UNTITLED Construct an instance of this class
             %   Detailed explanation goes here
 %             obj.nvictory = nvictory;
@@ -28,7 +28,7 @@ classdef Strategy < handle
             obj.gain_priority = gain_priority;
             obj.gain_cutoffs = gain_cutoffs;
             obj.play_priority = play_priority;
-            obj.discard_priority = discard_priority;
+%             obj.discard_priority = discard_priority;
             obj.trash_priority = trash_priority;
         end
         

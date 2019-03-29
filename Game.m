@@ -107,7 +107,7 @@ classdef Game < handle
                 if obj.players(playernum).buys < 1
                     break
                 else
-                    Igain = obj.strategies(playernum).gain_priority == i;
+                    Igain = obj.strategies(playernum).gain_priority(1,:) == i;
                     while (handval >= obj.cards(Igain).cost) && (obj.players(playernum).buys > 0) && (obj.cardcounts(Igain) > 0)
                         obj.players(playernum).gain(obj.cards(Igain));
                         obj.players(playernum).buys = obj.players(playernum).buys - 1;
@@ -257,7 +257,7 @@ classdef Game < handle
 %                       point)
                     % Get the index in the trash_priority list where the
                     % priority is equal to i
-                    Itrash = obj.strategies(playernum).trash_priority == i;
+                    Itrash = obj.strategies(playernum).trash_priority(1,:) == i;
                     preferred_trash = obj.cards(Itrash);
                     
                     cardlocs = ismember(obj.players(playernum).hand,preferred_trash);
