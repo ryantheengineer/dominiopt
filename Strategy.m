@@ -20,15 +20,9 @@ classdef Strategy < handle
     methods
         function obj = Strategy(gain_priority,gain_cutoffs,play_priority,trash_priority)
             %UNTITLED Construct an instance of this class
-            %   Detailed explanation goes here
-%             obj.nvictory = nvictory;
-%             obj.ntreasure = ntreasure;
-%             obj.naction = naction;
-%             obj.cards = cards;
             obj.gain_priority = gain_priority;
             obj.gain_cutoffs = gain_cutoffs;
             obj.play_priority = play_priority;
-%             obj.discard_priority = discard_priority;
             obj.trash_priority = trash_priority;
         end
         
