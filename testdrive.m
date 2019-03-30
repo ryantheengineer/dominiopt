@@ -5,13 +5,13 @@ clear;
 
 %% Set up cards
 cardlist;
-cards = [province duchy estate gold silver copper village woodcutter smithy festival market bureaucrat chapel cellar moat harbinger];
-actioncards = [village woodcutter smithy festival market laboratory chapel cellar moat harbinger];
+cards = [province duchy estate curse gold silver copper village woodcutter smithy festival market bureaucrat chapel cellar moat harbinger];
+actioncards = [village woodcutter smithy festival market laboratory chapel cellar moat harbinger]; % Is this necessary anymore?
 
 %% Set up strategies
 [gain_priority,gain_cutoffs,play_priority,trash_priority] = random_strategy(cards);
 strategy1 = Strategy(gain_priority,gain_cutoffs,play_priority,trash_priority);
-strategy1.gain_priority = [1 4 15 2 5 16 8 6 7 3 9 10 11 12 13 14];
+strategy1.gain_priority(1,:) = [1 4 15 2 5 16 8 6 7 3 9 10 11 12 13 14 17]; % Edit this to account for curse card in position 4
 strategy1.play_priority = [4 2 3 1 5 6 7 8 9 10];
 
 [gain_priority,gain_cutoffs,play_priority,trash_priority] = random_strategy(cards);

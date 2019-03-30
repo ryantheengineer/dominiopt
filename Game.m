@@ -31,8 +31,8 @@ classdef Game < handle
             obj.players = players;
             obj.strategies = strategies;
             obj.cards = cards;
-            assert(length(cards) == 16);
-            obj.actioncards = cards(7:end);
+            assert(length(cards) == 17);
+            obj.actioncards = cards(8:end);
         end
         
         
@@ -103,11 +103,11 @@ classdef Game < handle
             % Choose which cards to buy and get them
             handval = howrich(obj.players(playernum));
             
-            for i = 1:length(obj.strategies(playernum).gain_priority)
+            for i = 1:length(obj.strategies(playernum).gain_priority(1,:))
                 if obj.players(playernum).buys < 1
                     break
                 else
-                    Igain = obj.strategies(playernum).gain_priority(1,:) == i;
+                    Igain = (obj.strategies(playernum).gain_priority(1,:) == i);
                     while (handval >= obj.cards(Igain).cost) && (obj.players(playernum).buys > 0) && (obj.cardcounts(Igain) > 0)
                         obj.players(playernum).gain(obj.cards(Igain));
                         obj.players(playernum).buys = obj.players(playernum).buys - 1;
