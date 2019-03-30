@@ -10,7 +10,7 @@ classdef Game < handle
         strategies      = [];   % Vector of Strategy classes
         cards           = []; % Full list of cards in play (3 victory, 3 treasure, 10 actions)
         actioncards     = []; % 10 action cards in same order as in cards
-        cardcounts     = [12 12 12 10 20 30 10 10 10 10 10 10 10 10 10 10];
+        cardcounts     = [12 12 12 20 10 20 30 10 10 10 10 10 10 10 10 10 10];
         round           = 1; %NOT SURE IF THIS IS NECESSARY
         % detail_flag        = false; % flag for turning on or off the
         % string outputs that describe the game
