@@ -2,9 +2,6 @@ classdef Game < handle
     % Class for holding the characteristics of a specific set of strategies
     % and players
     
-    % NEED FUNCTION FOR PLAYING A NEW GAME, A SINGLE PLAYER TURN, AND
-    % PLAYING A ROUND. ALSO A GET FINAL SCORE MARGIN OUTPUT.
-    
     properties
         players         = [];   % Vector of Player objects
         strategies      = [];   % Vector of Strategy classes
