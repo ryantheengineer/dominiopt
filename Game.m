@@ -16,7 +16,7 @@ classdef Game < handle
         % string outputs that describe the game
         
         % Properties that might need to go in a simulation class
-        numgames        = 10; % Choose the number of games to play (default is 10)
+%         numgames        = 10; % Choose the number of games to play (default is 10)
         scores          = []; % Array for holding scores from players (columns are the players and rows are the scores)
         margins         = []; % Array for holding score margins for player 1 against the closest scoring player
 
@@ -103,16 +103,33 @@ classdef Game < handle
             % Choose which cards to buy and get them
             handval = howrich(obj.players(playernum));
             
-            for i = 1:length(obj.strategies(playernum).gain_priority(1,:))
+            for i = 1:length(obj.strategies(playernum).gain_priority)
                 if obj.players(playernum).buys < 1
                     break
                 else
-                    Igain = (obj.strategies(playernum).gain_priority(1,:) == i);
-                    while (handval >= obj.cards(Igain).cost) && (obj.players(playernum).buys > 0) && (obj.cardcounts(Igain) > 0)
-                        obj.players(playernum).gain(obj.cards(Igain));
-                        obj.players(playernum).buys = obj.players(playernum).buys - 1;
-                        obj.cardcounts(Igain) = obj.cardcounts(Igain) - 1;
-                        handval = handval - obj.cards(Igain).cost;
+                    Igain = find(obj.strategies(playernum).gain_priority == i);
+                    cardpercent = obj.get_percent(playernum,obj.cards(Igain));
+                    
+                    % If gain_cutoffs specifies a percent constraint, follow
+                    % that logic
+                    if obj.strategies(playernum).gain_cutoffs(1,Igain) == 0
+                        while ((handval >= obj.cards(Igain).cost) && (obj.players(playernum).buys > 0)...
+                                && (obj.cardcounts(Igain) > 0) && (cardpercent < obj.strategies(playernum).gain_cutoffs(2,Igain)))
+                            obj.players(playernum).gain(obj.cards(Igain));
+                            obj.players(playernum).buys = obj.players(playernum).buys - 1;
+                            obj.cardcounts(Igain) = obj.cardcounts(Igain) - 1;
+                            handval = handval - obj.cards(Igain).cost;
+                        end
+                        
+                    else
+                        while ((handval >= obj.cards(Igain).cost) && (obj.players(playernum).buys > 0) ...
+                                && (obj.cardcounts(Igain) > 0) && obj.cardcounts(Igain) < obj.strategies(playernum).gain_cutoffs(3,Igain))
+                            obj.players(playernum).gain(obj.cards(Igain));
+                            obj.players(playernum).buys = obj.players(playernum).buys - 1;
+                            obj.cardcounts(Igain) = obj.cardcounts(Igain) - 1;
+                            handval = handval - obj.cards(Igain).cost;
+                        end
+                        
                     end
                 end
             end
@@ -179,6 +196,70 @@ classdef Game < handle
             
         end
         
+        function [decklength] = decksize(obj,playernum)
+            Handsize = length(obj.players(playernum).hand);
+            Drawpilesize = length(obj.players(playernum).drawpile);
+            Discardsize = length(obj.players(playernum).discard);
+            Tableausize = length(obj.players(playernum).tableau);
+            
+            decklength = Handsize + Drawpilesize + Discardsize + Tableausize;
+            
+        end
+        
+        
+        % This function is the main source of slowing down the execution of
+        % n simulations
+        function [cardpercent] = get_percent(obj,playernum,checkcard)
+%             cardcount = 0;
+            handcount = sum(obj.players(playernum).hand == checkcard);
+            drawcount = sum(obj.players(playernum).drawpile == checkcard);
+            discardcount = sum(obj.players(playernum).discard == checkcard);
+            tableaucount = sum(obj.players(playernum).tableau == checkcard);
+
+            cardcount = handcount + drawcount + discardcount + tableaucount;
+           
+%             Handsize = length(obj.players(playernum).hand);
+%             Drawpilesize = length(obj.players(playernum).drawpile);
+%             Discardsize = length(obj.players(playernum).discard);
+%             Tableausize = length(obj.players(playernum).tableau);
+%             
+%             % Check hand for count of card of interest
+%             for i = 1:Handsize
+%                 if strcmp(obj.players(playernum).hand(i).name, checkcard.name)
+%                     cardcount = cardcount + 1;
+%                 end
+%             end
+%             
+%             % Check drawpile for count of card of interest
+%             for i = 1:Drawpilesize
+%                 if strcmp(obj.players(playernum).drawpile(i).name, checkcard.name)
+%                     cardcount = cardcount + 1;
+%                 end
+%             end
+%             
+%             % Check discard for count of card of interest
+%             for i = 1:Discardsize
+%                 if strcmp(obj.players(playernum).discard(i).name, checkcard.name)
+%                     cardcount = cardcount + 1;
+%                 end
+%             end
+%             
+%             % Check tableau for count of card of interest
+%             for i = 1:Tableausize
+%                 if strcmp(obj.players(playernum).tableau(i).name, checkcard.name)
+%                     cardcount = cardcount + 1;
+%                 end
+%             end
+            
+            
+            % Get the total number of cards in the deck
+            decklength = obj.decksize(playernum);
+            
+            % Calculate percent of desired card in the deck
+            cardpercent = cardcount/decklength;
+            
+        end
+        
         
         %% Card effect actions that require a strategy input
         function apply_effects(obj,playernum,card_played)
@@ -188,10 +269,10 @@ classdef Game < handle
             
             switch effect
                 case 'chapel_effect'
-                    disp('Chapel card effect happens!');
+%                     disp('Chapel card effect happens!');
                     obj.chapel_action(playernum);
                 case 'bureaucrat_effect'
-                    disp('Bureaucrat card effect happens!');
+%                     disp('Bureaucrat card effect happens!');
                     obj.bureaucrat_action(playernum)
                 otherwise
 %                     disp('This is what happens when another action card is played');
@@ -203,36 +284,36 @@ classdef Game < handle
             % Gain a Silver onto your deck. Each other player reveals a
             % Victory card from their hand and puts it onto their deck (or
             % reveals a hand with no Victory cards)
-            silvercount = obj.cardcounts(5);
+            silvercount = obj.cardcounts(6);
             if silvercount > 0
-                obj.players(playernum).gain(obj.cards(5));
-                obj.cardcounts(5) = silvercount - 1;
+                obj.players(playernum).gain(obj.cards(6));
+                obj.cardcounts(6) = silvercount - 1;
             end
             
             % Each other player goes through their hand to put a Victory
             % card on top of their deck
             NumPlayers = obj.num_players;
-            for i = 1:NumPlayers
-                if i ~= playernum
+            for j = 1:NumPlayers
+                if j ~= playernum
                     victory_in_hand = 0;
-                    Hand = obj.players(i).hand;
-                    Drawpile = obj.players(i).drawpile;
+                    Hand = obj.players(j).hand;
+                    Drawpile = obj.players(j).drawpile;
                     % Cycle through player i's hand
-                    for j = 1:length(Hand)
+                    for i = 1:length(Hand)
                         % Check if they haven't already pulled out a
                         % victory card
                         if victory_in_hand < 1
                             % Get the card in question
-                            check_card = obj.players(i).hand(j);
+                            check_card = obj.players(j).hand(i);
                             if check_card.isVictory == true
                                 % If it's a victory card, put the card on
                                 % top of the draw pile
                                 Drawpile = [check_card,Drawpile];
-                                obj.players(i).drawpile = Drawpile;
+                                obj.players(j).drawpile = Drawpile;
                                 
                                 % Remove the victory card from the hand
-                                Hand(j) = [];
-                                obj.players(i).hand = Hand;
+                                Hand(i) = [];
+                                obj.players(j).hand = Hand;
                                 victory_in_hand = 1;
                             end
                         end
@@ -249,7 +330,7 @@ classdef Game < handle
             
             Hand = obj.players(playernum).hand;
             
-            for i = 1:length(obj.strategies(playernum).trash_priority)
+            for j = 1:length(obj.strategies(playernum).trash_priority)
                 if trashcount > 4
                     break
                 else
@@ -257,7 +338,7 @@ classdef Game < handle
 %                       point)
                     % Get the index in the trash_priority list where the
                     % priority is equal to i
-                    Itrash = obj.strategies(playernum).trash_priority(1,:) == i;
+                    Itrash = obj.strategies(playernum).trash_priority(1,:) == j;
                     preferred_trash = obj.cards(Itrash);
                     
                     cardlocs = ismember(obj.players(playernum).hand,preferred_trash);
@@ -272,8 +353,8 @@ classdef Game < handle
                         
                         % NOT SURE IF THIS IS WORKING; NOT SHOWING THIS
                         % OUTPUT IN TESTDRIVE.M
-                        str = sprintf('Player trashes %s card',chosen_trash.name);
-                        disp(str);
+%                         str = sprintf('Player trashes %s card',chosen_trash.name);
+%                         disp(str);
                         trashcount = trashcount + 1;   
                     end
                 end
@@ -289,7 +370,7 @@ classdef Game < handle
             % deck)
             Discard = obj.players(playernum).discard;
             Drawpile = obj.players(playernum).drawpile;
-            for i = 1:length(Discard)
+            for j = 1:length(Discard)
                 for j = 1:length(obj.strategies(playernum).gain_priority)
                     % Get index in cards where the preferred card, according
                     % to gain_priority, is located
