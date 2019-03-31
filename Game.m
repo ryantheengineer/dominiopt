@@ -60,7 +60,7 @@ classdef Game < handle
         
         function play_turn(obj,playernum)
             % Play a turn for a single player
-%             showcards(obj.players(playernum));
+            showcards(obj.players(playernum));
 
             % PLAY ACTION CARDS FIRST according to action card priority
             % list in corresponding strategy
@@ -128,6 +128,9 @@ classdef Game < handle
                         end
                         
                     end
+                    
+%                     str = sprintf('Player buys %s',obj.cards(Igain).name);
+%                     disp(str);
                 end
             end
             
@@ -158,6 +161,8 @@ classdef Game < handle
                 obj.play_round;
                 gameover = obj.isgameover;
             end
+            obj.get_scores()
+%             obj.scores
         end
         
         
