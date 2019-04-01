@@ -27,7 +27,7 @@ players = [player1,player2];
 
 %% Set up and run game simulations
 
-ngames = 1;
+ngames = 100;
 [avg_score_margin] = Dominion(ngames,players,strategies,cards,firstcards);
 
 str = sprintf('Avg score margin: %0.2f',avg_score_margin);

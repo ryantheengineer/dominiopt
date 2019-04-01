@@ -104,12 +104,14 @@ classdef Game < handle
                 if obj.players(playernum).buys < 1
                     break
                 else
+                    % Find the indices where the gain_priority is i
                     Igain = find(obj.strategies(playernum).gain_priority(1,:) == i);
                     % If the preferred card has an off switch on it, skip
                     % trying to buy this card (DOESN'T CURRENTLY WORK AS
                     % INTENDED)
                     if obj.strategies(playernum).gain_priority(2,Igain) == 0
-                        break
+%                         disp(obj.strategies(playernum).gain_priority(2,Igain));
+                        continue
                     else
                         cardpercent = obj.get_percent(playernum,obj.cards(Igain));
 
@@ -151,8 +153,8 @@ classdef Game < handle
             for i = 1:numplayers
                 obj.play_turn(i);
             end
-            str = sprintf('%d ',obj.cardcounts);
-            disp(str);
+%             str = sprintf('%d ',obj.cardcounts);
+%             disp(str);
         end
         
         
