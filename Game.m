@@ -60,7 +60,7 @@ classdef Game < handle
         
         function play_turn(obj,playernum)
             % Play a turn for a single player
-            showcards(obj.players(playernum));
+%             showcards(obj.players(playernum));
 
             % PLAY ACTION CARDS FIRST according to action card priority
             % list in corresponding strategy
@@ -100,37 +100,44 @@ classdef Game < handle
             % Choose which cards to buy and get them
             handval = howrich(obj.players(playernum));
             
-            for i = 1:length(obj.strategies(playernum).gain_priority)
+            for i = 1:length(obj.strategies(playernum).gain_priority(1,:))
                 if obj.players(playernum).buys < 1
                     break
                 else
-                    Igain = find(obj.strategies(playernum).gain_priority == i);
-                    cardpercent = obj.get_percent(playernum,obj.cards(Igain));
-                    
-                    % If gain_cutoffs specifies a percent constraint, follow
-                    % that logic
-                    if obj.strategies(playernum).gain_cutoffs(1,Igain) == 0
-                        while ((handval >= obj.cards(Igain).cost) && (obj.players(playernum).buys > 0)...
-                                && (obj.cardcounts(Igain) > 0) && (cardpercent < obj.strategies(playernum).gain_cutoffs(2,Igain)))
-                            obj.players(playernum).gain(obj.cards(Igain));
-                            obj.players(playernum).buys = obj.players(playernum).buys - 1;
-                            obj.cardcounts(Igain) = obj.cardcounts(Igain) - 1;
-                            handval = handval - obj.cards(Igain).cost;
-                        end
-                        
+                    Igain = find(obj.strategies(playernum).gain_priority(1,:) == i);
+                    % If the preferred card has an off switch on it, skip
+                    % trying to buy this card (DOESN'T CURRENTLY WORK AS
+                    % INTENDED)
+                    if obj.strategies(playernum).gain_priority(2,Igain) == 0
+                        break
                     else
-                        while ((handval >= obj.cards(Igain).cost) && (obj.players(playernum).buys > 0) ...
-                                && (obj.cardcounts(Igain) > 0) && obj.cardcounts(Igain) < obj.strategies(playernum).gain_cutoffs(3,Igain))
-                            obj.players(playernum).gain(obj.cards(Igain));
-                            obj.players(playernum).buys = obj.players(playernum).buys - 1;
-                            obj.cardcounts(Igain) = obj.cardcounts(Igain) - 1;
-                            handval = handval - obj.cards(Igain).cost;
+                        cardpercent = obj.get_percent(playernum,obj.cards(Igain));
+
+                        % If gain_cutoffs specifies a percent constraint, follow
+                        % that logic
+                        if obj.strategies(playernum).gain_cutoffs(1,Igain) == 0
+                            while ((handval >= obj.cards(Igain).cost) && (obj.players(playernum).buys > 0)...
+                                    && (obj.cardcounts(Igain) > 0) && (cardpercent < obj.strategies(playernum).gain_cutoffs(2,Igain)))
+                                obj.players(playernum).gain(obj.cards(Igain));
+                                obj.players(playernum).buys = obj.players(playernum).buys - 1;
+                                obj.cardcounts(Igain) = obj.cardcounts(Igain) - 1;
+                                handval = handval - obj.cards(Igain).cost;
+                            end
+
+                        else
+                            while ((handval >= obj.cards(Igain).cost) && (obj.players(playernum).buys > 0) ...
+                                    && (obj.cardcounts(Igain) > 0) && obj.cardcounts(Igain) < obj.strategies(playernum).gain_cutoffs(3,Igain))
+                                obj.players(playernum).gain(obj.cards(Igain));
+                                obj.players(playernum).buys = obj.players(playernum).buys - 1;
+                                obj.cardcounts(Igain) = obj.cardcounts(Igain) - 1;
+                                handval = handval - obj.cards(Igain).cost;
+                            end
+
                         end
-                        
+
+    %                     str = sprintf('Player buys %s',obj.cards(Igain).name);
+    %                     disp(str);
                     end
-                    
-%                     str = sprintf('Player buys %s',obj.cards(Igain).name);
-%                     disp(str);
                 end
             end
             
@@ -144,6 +151,8 @@ classdef Game < handle
             for i = 1:numplayers
                 obj.play_turn(i);
             end
+            str = sprintf('%d ',obj.cardcounts);
+            disp(str);
         end
         
         
@@ -373,10 +382,10 @@ classdef Game < handle
             Discard = obj.players(playernum).discard;
             Drawpile = obj.players(playernum).drawpile;
             for j = 1:length(Discard)
-                for j = 1:length(obj.strategies(playernum).gain_priority)
+                for j = 1:length(obj.strategies(playernum).gain_priority(1,:))
                     % Get index in cards where the preferred card, according
                     % to gain_priority, is located
-                    Igain = obj.strategies(playernum).gain_priority == j;
+                    Igain = obj.strategies(playernum).gain_priority(1,:) == j;
                     
                     
                     % WORK ON THE LOGIC HERE!!!!!
