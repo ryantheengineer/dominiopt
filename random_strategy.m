@@ -1,9 +1,9 @@
-function [gain_priority,gain_cutoffs,play_priority,trash_priority] = random_strategy(cards)
+function [gain_priority,gain_cutoffs,play_priority,trash_priority] = random_strategy(CARDS)
     % ONLY GOOD FOR GENERATING COMPLETELY NEW STRATEGIES, NOT BASED ON
     % PREVIOUS PARENTS (MIGHT NOT BE IMPLEMENTED IN THE FINAL PROJECT, BUT
     % USEFUL FOR TESTING GAMEPLAY WITH RANDOM STRATEGIES TO SEE IF IT
     % BREAKS)
-    numcards = length(cards);
+    numcards = length(CARDS);
     
     % Generate integer lists 
     gain_priority(1,:) = linspace(1,numcards,numcards); % Order in which cards should be preferred
