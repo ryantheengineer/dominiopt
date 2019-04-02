@@ -12,7 +12,9 @@ actioncards = [village woodcutter smithy festival market laboratory chapel cella
 [gain_priority,gain_cutoffs,play_priority,trash_priority] = random_strategy(cards);
 strategy1 = Strategy(gain_priority,gain_cutoffs,play_priority,trash_priority);
 strategy1.gain_priority(1,:) = [1 4 15 2 5 16 8 6 7 3 9 10 11 12 13 14 17]; % Edit this to account for curse card in position 4
+strategy1.gain_cutoffs(3,:) = [12 12 12 0 10 10 10 10 10 10 10 10 10 10 10 10 10];
 strategy1.play_priority = [4 2 3 1 5 6 7 8 9 10];
+strategy1.trash_priority(2,:) = [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0];
 
 [gain_priority,gain_cutoffs,play_priority,trash_priority] = random_strategy(cards);
 strategy2 = Strategy(gain_priority,gain_cutoffs,play_priority,trash_priority);

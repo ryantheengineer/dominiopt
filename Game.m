@@ -59,7 +59,18 @@ classdef Game < handle
         
         
         function play_turn(obj,playernum)
-            % Play a turn for a single player
+            % Play a turn. First play preferred actions until no more
+            % actions are possible. Then buy the preferred cards according
+            % to the conditions set in the player's strategy.
+            obj.play_actions(playernum);            
+            obj.buy_preferred(playernum);
+            obj.players(playernum).next_turn;
+            
+        end
+        
+        
+        function play_actions(obj,playernum)
+           % Play a turn for a single player
 %             showcards(obj.players(playernum));
 
             % PLAY ACTION CARDS FIRST according to action card priority
@@ -82,8 +93,8 @@ classdef Game < handle
                         chosen_action = preferred_action;
                         obj.players(playernum).play_action(chosen_action);
                         
-%                       str = sprintf('Player 1 plays %s',chosen_action.name);
-%                       disp(str);
+%                         str = sprintf('Player %d plays %s',playernum,chosen_action.name);
+%                         disp(str);
 
                         delta_actions = chosen_action.actions;
                         delta_buys = chosen_action.buys;
@@ -93,11 +104,15 @@ classdef Game < handle
                         % Add lines for applying other effects of action
                         % cards here
                         obj.apply_effects(playernum,chosen_action);
+%                         str = sprintf('%s action played',chosen_action.name);
+%                         disp(str);
                     end
                 end
-            end
-            
-            % Choose which cards to buy and get them
+            end 
+        end
+        
+        function buy_preferred(obj,playernum)
+        % Choose which cards to buy and get them
             handval = howrich(obj.players(playernum));
             
             for i = 1:length(obj.strategies(playernum).gain_priority(1,:))
@@ -106,6 +121,10 @@ classdef Game < handle
                 else
                     % Find the indices where the gain_priority is i
                     Igain = find(obj.strategies(playernum).gain_priority(1,:) == i);
+%                     if length(Igain) > 1
+%                         disp('Igain did something weird');
+%                     end
+
                     % If the preferred card has an off switch on it, skip
                     % trying to buy this card (DOESN'T CURRENTLY WORK AS
                     % INTENDED)
@@ -126,9 +145,25 @@ classdef Game < handle
                                 handval = handval - obj.cards(Igain).cost;
                             end
 
+                        % Otherwise use a "cards left" constraint
                         else
+                            % Check least victory cards left
+                            min_cardsleft = obj.check_victory_left();
+                            
+                            % Check least three action card deck amounts
+                            lowest_three_actions = obj.check_action_decks();
+                            
+                            % Get logical value for if either min_cardsleft
+                            % or all the elements of lowest_three_actions
+                            % are below a threshold called out by player's
+                            % strategy (fed into the while loop conditions
+                            % below)
+                            cardsleft_condition = ((min_cardsleft <= obj.strategies(playernum).gain_cutoffs(3,Igain)) ...
+                                || all(lowest_three_actions <= obj.strategies(playernum).gain_cutoffs(3,Igain)));
+                            
+                            
                             while ((handval >= obj.cards(Igain).cost) && (obj.players(playernum).buys > 0) ...
-                                    && (obj.cardcounts(Igain) > 0) && obj.cardcounts(Igain) < obj.strategies(playernum).gain_cutoffs(3,Igain))
+                                    && (obj.cardcounts(Igain) > 0) && cardsleft_condition == true)
                                 obj.players(playernum).gain(obj.cards(Igain));
                                 obj.players(playernum).buys = obj.players(playernum).buys - 1;
                                 obj.cardcounts(Igain) = obj.cardcounts(Igain) - 1;
@@ -137,15 +172,34 @@ classdef Game < handle
 
                         end
 
-    %                     str = sprintf('Player buys %s',obj.cards(Igain).name);
-    %                     disp(str);
+%                         str = sprintf('Player %d buys %s',playernum,obj.cards(Igain).name);
+%                         disp(str);
                     end
                 end
-            end
-            
-            obj.players(playernum).next_turn;
-            
+            end    
         end
+              
+        function [min_cardsleft] = check_victory_left(obj)
+            % Check the lowest number of victory cards left to see how
+            % close the game is to ending (ignoring Curse cards)
+            cards_to_check = obj.cardcounts(1:3);
+            min_cardsleft = min(cards_to_check);
+        end
+        
+        function [lowest_three_actions] = check_action_decks(obj)
+            % Check the action card piles to see what the lowest three
+            % numbers of cards left are (used for checking if game is
+            % approaching end)
+            n = 3;
+            lowest_three_actions = zeros(1,n);
+            ActionCounts = obj.cardcounts(8:end);
+            for i = 1:n
+                [lowest_three_actions(i),idx] = min(ActionCounts);
+                % remove the lowest index for the next iteration
+                ActionCounts(idx) = [];
+            end
+        end
+        
         
         function play_round(obj)
             % Play a single round (all players take one turn)
@@ -220,50 +274,14 @@ classdef Game < handle
         end
         
         
-        % This function is the main source of slowing down the execution of
-        % n simulations
         function [cardpercent] = get_percent(obj,playernum,checkcard)
-%             cardcount = 0;
+            % Check the percentage of checkcard in the player's entire deck
             handcount = sum(obj.players(playernum).hand == checkcard);
             drawcount = sum(obj.players(playernum).drawpile == checkcard);
             discardcount = sum(obj.players(playernum).discard == checkcard);
             tableaucount = sum(obj.players(playernum).tableau == checkcard);
 
-            cardcount = handcount + drawcount + discardcount + tableaucount;
-           
-%             Handsize = length(obj.players(playernum).hand);
-%             Drawpilesize = length(obj.players(playernum).drawpile);
-%             Discardsize = length(obj.players(playernum).discard);
-%             Tableausize = length(obj.players(playernum).tableau);
-%             
-%             % Check hand for count of card of interest
-%             for i = 1:Handsize
-%                 if strcmp(obj.players(playernum).hand(i).name, checkcard.name)
-%                     cardcount = cardcount + 1;
-%                 end
-%             end
-%             
-%             % Check drawpile for count of card of interest
-%             for i = 1:Drawpilesize
-%                 if strcmp(obj.players(playernum).drawpile(i).name, checkcard.name)
-%                     cardcount = cardcount + 1;
-%                 end
-%             end
-%             
-%             % Check discard for count of card of interest
-%             for i = 1:Discardsize
-%                 if strcmp(obj.players(playernum).discard(i).name, checkcard.name)
-%                     cardcount = cardcount + 1;
-%                 end
-%             end
-%             
-%             % Check tableau for count of card of interest
-%             for i = 1:Tableausize
-%                 if strcmp(obj.players(playernum).tableau(i).name, checkcard.name)
-%                     cardcount = cardcount + 1;
-%                 end
-%             end
-            
+            cardcount = handcount + drawcount + discardcount + tableaucount;            
             
             % Get the total number of cards in the deck
             decklength = obj.decksize(playernum);
@@ -351,24 +369,28 @@ classdef Game < handle
 %                       point)
                     % Get the index in the trash_priority list where the
                     % priority is equal to i
-                    Itrash = obj.strategies(playernum).trash_priority(1,:) == j;
-                    preferred_trash = obj.cards(Itrash);
-                    
-                    cardlocs = ismember(obj.players(playernum).hand,preferred_trash);
-                    havecard = any(cardlocs);
-                    
-                    % If you have the preferred card in hand, play it (need
-                    % to implement checking, in case a new card has been
-                    % gained through an action card power)
-                    if havecard == true
-                        chosen_trash = preferred_trash;
-                        obj.players(playernum).trash_card(chosen_trash);
-                        
-                        % NOT SURE IF THIS IS WORKING; NOT SHOWING THIS
-                        % OUTPUT IN TESTDRIVE.M
-%                         str = sprintf('Player trashes %s card',chosen_trash.name);
-%                         disp(str);
-                        trashcount = trashcount + 1;   
+                    Itrash = find(obj.strategies(playernum).trash_priority(1,:) == j);
+                    if obj.strategies(playernum).trash_priority(2,Itrash) == 0
+                        continue
+                    else
+                        preferred_trash = obj.cards(Itrash);
+
+                        cardlocs = ismember(obj.players(playernum).hand,preferred_trash);
+                        havecard = any(cardlocs);
+
+                        % If you have the preferred card in hand, play it (need
+                        % to implement checking, in case a new card has been
+                        % gained through an action card power)
+                        if havecard == true
+                            chosen_trash = preferred_trash;
+                            obj.players(playernum).trash_card(chosen_trash);
+
+                            % NOT SURE IF THIS IS WORKING; NOT SHOWING THIS
+                            % OUTPUT IN TESTDRIVE.M
+    %                         str = sprintf('Player trashes %s card',chosen_trash.name);
+    %                         disp(str);
+                            trashcount = trashcount + 1;   
+                        end
                     end
                 end
             end
