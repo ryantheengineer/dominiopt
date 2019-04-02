@@ -120,7 +120,7 @@ classdef Game < handle
                     break
                 else
                     % Find the indices where the gain_priority is i
-                    Igain = find(obj.strategies(playernum).gain_priority(1,:) == i);
+                    Igain = obj.strategies(playernum).gain_priority(1,:) == i;
 %                     if length(Igain) > 1
 %                         disp('Igain did something weird');
 %                     end
