@@ -1,7 +1,7 @@
 clc;clear;dbstop if error;
-generation = 5;
-population = 10;
-numcompete = 3;
+generation = 15;
+population = 20;
+numcompete = 3; % Number of individuals pitted against each other in tournament selection
 
 % Initialize cards
 cardlist;
@@ -15,7 +15,7 @@ end
 
 
 for currentGeneration = 1:generation
-    %second param = number of parents in a competition
+    currentGeneration
     winners = tournament(Parents,numcompete,cards,firstcards);
     children = [];
     for i = 1:length(winners)/2
@@ -41,5 +41,5 @@ for currentGeneration = 1:generation
 end
 [value, index] = max(Score)
 
-disp('Best strategy:');
+disp('BEST STRATEGY:');
 interpret_gene(eliSet(index),cards);

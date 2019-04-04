@@ -24,7 +24,7 @@ function [avg_score_margin] = Dominiopt(gain_priority,gain_cutoffs,play_priority
     % Create strategies
     strategy1 = Strategy(gain_priority,gain_cutoffs,play_priority,trash_priority);
     strategy2 = chooseOpponent('BigMoney');
-    strategy3 = chooseOpponent('BigMoney');
+    strategy3 = chooseOpponent('BigSmithy');
     
     strategies = [strategy1,strategy2,strategy3];
     assert(length(strategies) == numplayers);
