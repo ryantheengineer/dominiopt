@@ -1,7 +1,7 @@
 clc;clear;dbstop if error;
-generation = 5;
-population = 5;
-crossThres = 0.6;
+generation = 15;
+population = 20;
+numcompete = 3;
 
 % Initialize cards
 cardlist;
@@ -16,7 +16,7 @@ end
 
 for currentGeneration = 1:generation
     %second param = number of parents in a competition
-    winners = tournament(Parents,3,cards,firstcards);
+    winners = tournament(Parents,numcompete,cards,firstcards);
     children = [];
     for i = 1:length(winners)/2
         [child1,child2] = crossOver(winners(i),winners(i+1));

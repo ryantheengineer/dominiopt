@@ -1,7 +1,7 @@
 function [child] = mutate(parentGene, currentGeneration, totalGen)
 numCards = length(parentGene.gain_priority);
-switchThres = 0.4;
-mutateThres = 0.2;
+switchThres = 0.4; % Can change this
+mutateThres = 0.2; % Can change this
 beta = 1;
 alpha = (1-(currentGeneration-1)/totalGen)^beta;
 % for gain_priority
