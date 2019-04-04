@@ -1,6 +1,6 @@
 clc;clear;dbstop if error;
-generation = 2;
-population = 20;
+generation = 5;
+population = 5;
 crossThres = 0.6;
 
 % Initialize cards
@@ -16,14 +16,14 @@ end
 
 for currentGeneration = 1:generation
     %second param = number of parents in a competition
-    winners = tournament(Parents,2,cards,firstcards);
+    winners = tournament(Parents,3,cards,firstcards);
     children = [];
     for i = 1:length(winners)/2
         [child1,child2] = crossOver(winners(i),winners(i+1));
         children = [children,child1,child2];
     end
     for i = 1:length(children)
-        result(i) = mutate(children(i), currentGeneration);
+        result(i) = mutate(children(i), currentGeneration, generation);
     end
     
     %Elitism
@@ -36,6 +36,8 @@ for currentGeneration = 1:generation
     for i = 1:keepSize
         Parents(i) = eliSet(I(i));
     end
+    [scoreHistory(currentGeneration), ind] = max(Score);
+    playHistory(currentGeneration) = eliSet(ind);
 end
 [value, index] = max(Score)
 

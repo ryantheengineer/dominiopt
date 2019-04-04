@@ -3,25 +3,35 @@ crossThres = 0.6;
 
 % uniform cross over for all binary representation
 numCards = length(parent1.gain_priority);
-for i = 1:numCards
-    %second row of gain priority
-    if (rand <= 0.5)
-        temp = parent1.gain_priority(2,i);
-        parent1.gain_priority(2,i) = parent2.gain_priority(2,i);
-        parent2.gain_priority(2,i) = temp;
+if (rand < crossThres)
+    for i = 1:numCards
+        %second row of gain priority
+        if (rand <= 0.5)
+            temp = parent1.gain_priority(2,i);
+            parent1.gain_priority(2,i) = parent2.gain_priority(2,i);
+            parent2.gain_priority(2,i) = temp;
+        end
     end
-    % first row of gain_cutoffs
-     if (rand <= 0.5)
-        temp = parent1.gain_cutoffs(1,i);
-        parent1.gain_cutoffs(1,i) = parent2.gain_cutoffs(1,i);
-        parent2.gain_cutoffs(1,i) = temp;
-     end
-    %second row of trash_priority
-     if (rand <= 0.5)
-        temp = parent1.trash_priority(2,i);
-        parent1.trash_priority(2,i) = parent2.trash_priority(2,i);
-        parent2.trash_priority(2,i) = temp;
-     end
+end
+if (rand < crossThres)
+    for i = 1:numCards
+        % first row of gain_cutoffs
+        if (rand <= 0.5)
+            temp = parent1.gain_cutoffs(1,i);
+            parent1.gain_cutoffs(1,i) = parent2.gain_cutoffs(1,i);
+            parent2.gain_cutoffs(1,i) = temp;
+        end
+    end
+end
+if (rand < crossThres)
+    for i = 1:numCards
+        %second row of trash_priority
+        if (rand <= 0.5)
+            temp = parent1.trash_priority(2,i);
+            parent1.trash_priority(2,i) = parent2.trash_priority(2,i);
+            parent2.trash_priority(2,i) = temp;
+        end
+    end
 end
 % blend cross over at each column for other representation
 for i = 1:numCards
