@@ -84,29 +84,30 @@ classdef Player < handle
         
         function draw(obj,n)
             % Draw n cards from the drawpile, shuffling if necessary
-            if length(obj.drawpile) < n
-                % Shuffle the discard pile
-                Discard = obj.discard;
-                N = numel(Discard);
-                ii = randperm(N);
-                Discard_shuffled = Discard(ii);
-                
-                % Append the shuffled discard pile to the draw pile
-                Drawpile = obj.drawpile;
-                Drawpile = [Drawpile,Discard_shuffled];
-                obj.drawpile = Drawpile;
-                
-                % Clear the discard
-                obj.discard = [];
+            if ((length(obj.drawpile) + length(obj.discard)) > n)
+                if length(obj.drawpile) < n
+                    % Shuffle the discard pile
+                    Discard = obj.discard;
+                    N = numel(Discard);
+                    ii = randperm(N);
+                    Discard_shuffled = Discard(ii);
+
+                    % Append the shuffled discard pile to the draw pile
+                    Drawpile = obj.drawpile;
+                    Drawpile = [Drawpile,Discard_shuffled];
+                    obj.drawpile = Drawpile;
+
+                    % Clear the discard
+                    obj.discard = [];
+                end
+
+                drawn = obj.drawpile(1:n);
+                drawpile_remaining = obj.drawpile((n+1):end);
+                Hand = obj.hand;
+                Hand = [Hand,drawn];
+                obj.hand = Hand;
+                obj.drawpile = drawpile_remaining;         
             end
-           
-            drawn = obj.drawpile(1:n);
-            drawpile_remaining = obj.drawpile((n+1):end);
-            Hand = obj.hand;
-            Hand = [Hand,drawn];
-            obj.hand = Hand;
-            obj.drawpile = drawpile_remaining;         
-            
         end
         
         
