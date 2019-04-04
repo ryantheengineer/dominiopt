@@ -1,6 +1,6 @@
 clc;clear;dbstop if error;
-generation = 15;
-population = 20;
+generation = 5;
+population = 10;
 numcompete = 3;
 
 % Initialize cards

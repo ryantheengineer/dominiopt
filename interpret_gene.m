@@ -6,10 +6,12 @@ function interpret_gene(chosen_gene,cards)
     disp('Play action cards in this order:');
     actioncards = cards(8:17);
     for i = 1:10
-        Iplay = chosen_gene.play_priority == i;
-        preferred_action = actioncards(Iplay);
-        actstr = sprintf('\t %s',preferred_action.name);
-        disp(actstr);
+        Iplay = find(chosen_gene.play_priority == i);
+        if chosen_gene.gain_priority(2,(Iplay+7)) == 1
+            preferred_action = actioncards(Iplay);
+            actstr = sprintf('\t %s',preferred_action.name);
+            disp(actstr);
+        end
     end
     
     disp('Buy these cards in this order of preference, under conditions:');
