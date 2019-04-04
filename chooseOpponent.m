@@ -20,12 +20,12 @@ function AIStrategy = chooseOpponent(AIname)
             play_priority = [];
             trash_priority = [];
             
-        case 'UpgradeTrash'
-            %Requires: 
-            gain_priority = [];
-            gain_cutoffs = [];
-            play_priority = [];
-            trash_priority = [];
+%         case 'UpgradeTrash'
+%             %Requires: 
+%             gain_priority = [];
+%             gain_cutoffs = [];
+%             play_priority = [];
+%             trash_priority = [];
             
         
         otherwise
