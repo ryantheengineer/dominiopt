@@ -1,11 +1,11 @@
 clc;clear;dbstop if error;
-generation = 20;
+generation = 2;
 population = 20;
 crossThres = 0.6;
 
 % Initialize cards
 cardlist;
-cards = [province duchy estate curse gold silver copper village woodcutter smithy festival market bureaucrat chapel cellar moat harbinger];
+cards = [province duchy estate curse gold silver copper village woodcutter smithy festival market bureaucrat witch councilroom moat mine];
 
 
 % generate initial parents
@@ -38,3 +38,6 @@ for currentGeneration = 1:generation
     end
 end
 [value, index] = max(Score)
+
+disp('Best strategy:');
+interpret_gene(eliSet(index),cards);

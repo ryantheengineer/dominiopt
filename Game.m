@@ -396,8 +396,8 @@ classdef Game < handle
 
                             % NOT SURE IF THIS IS WORKING; NOT SHOWING THIS
                             % OUTPUT IN TESTDRIVE.M
-                            str = sprintf('Player trashes %s card',chosen_trash.name);
-                            disp(str);
+%                             str = sprintf('Player trashes %s card',chosen_trash.name);
+%                             disp(str);
                             trashcount = trashcount + 1;   
                         end
                     end
@@ -431,8 +431,8 @@ classdef Game < handle
                 if (obj.strategies(playernum).gain_priority(2,Igain) ~= 0)...
                         && (obj.cards(Igain).isVictory == false)
                     
-                    str = sprintf('Preferred card is %s',obj.cards(Igain).name);
-                    disp(str);
+%                     str = sprintf('Preferred card is %s',obj.cards(Igain).name);
+%                     disp(str);
                     
                     % Cycle through the discard until the chosen card is
                     % found
@@ -441,8 +441,8 @@ classdef Game < handle
                         % If the name matches, get the card and remove it
                         % from the discard
                         if gotname == true
-                            str = sprintf('Found %s in discard',obj.cards(Igain).name);
-                            disp(str);
+%                             str = sprintf('Found %s in discard',obj.cards(Igain).name);
+%                             disp(str);
                             Discard(j) = [];
                             obj.players(playernum).discard = Discard;
                             Drawpile = [obj.cards(Igain),Drawpile];
