@@ -1,11 +1,11 @@
 clc;clear;dbstop if error;
-generation = 5;
-population = 5;
-numcompete = 2; % Number of individuals pitted against each other in tournament selection
+generation = 500;
+population = 30;
+numcompete = 4; % Number of individuals pitted against each other in tournament selection
 
 % Initialize cards
 cardlist;
-cards = [province duchy estate curse gold silver copper village woodcutter smithy festival market bureaucrat witch councilroom moat mine];
+cards = [province duchy estate curse gold silver copper smithy witch village woodcutter festival market bureaucrat councilroom moat mine];
 
 
 % generate initial parents
@@ -38,7 +38,8 @@ for currentGeneration = 1:generation
     for i = 1:keepSize
         Parents(i) = eliSet(I(i));
     end
-    [scoreHistory(currentGeneration), ind] = max(Score);
+    [value, index] = max(Score);
+    [scoreHistory(currentGeneration), ind] = max(Score); % Save the maximum score from each generation (what does ind do here?)
     Score(ind) = -Inf;
     [secondScore, ind2] = max(Score);
     Score(ind2) = -Inf;
@@ -48,7 +49,8 @@ for currentGeneration = 1:generation
     thirdDesign = eliSet(ind3);
     playHistory(currentGeneration) = BestDesign;
 end
-[value, index] = max(Score)
+value
+index
 
 disp('BEST STRATEGY:');
 interpret_gene(eliSet(index),cards);
