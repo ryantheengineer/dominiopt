@@ -1,7 +1,7 @@
 clc;clear;dbstop if error;
 generation = 5;
 population = 5;
-numcompete = 3; % Number of individuals pitted against each other in tournament selection
+numcompete = 2; % Number of individuals pitted against each other in tournament selection
 
 % Initialize cards
 cardlist;
@@ -18,7 +18,6 @@ secondDesign = [];
 thirdDesign = [];
 for currentGeneration = 1:generation
     currentGeneration
-    Parents = [Parents, BestDesign,secondDesign,thirdDesign];
     winners = tournament(Parents,numcompete,cards,firstcards);
     children = [];
     for i = 1:length(winners)/2
@@ -30,7 +29,7 @@ for currentGeneration = 1:generation
     end
     
     %Elitism
-    eliSet = [Parents,result];
+    eliSet = [Parents,result, BestDesign,secondDesign,thirdDesign];
     for i = 1:length(eliSet)
         Score(i) = getScore(eliSet(i),cards,firstcards);
     end
