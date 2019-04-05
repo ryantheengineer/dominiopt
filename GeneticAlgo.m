@@ -1,6 +1,6 @@
 clc;clear;dbstop if error;
-generation = 10;
-population = 10;
+generation = 5;
+population = 5;
 numcompete = 3; % Number of individuals pitted against each other in tournament selection
 
 % Initialize cards
@@ -13,9 +13,12 @@ for i = 1:population
     Parents(i) = gene();
 end
 
-
+BestDesign = [];
+secondDesign = [];
+thirdDesign = [];
 for currentGeneration = 1:generation
     currentGeneration
+    Parents = [Parents, BestDesign,secondDesign,thirdDesign];
     winners = tournament(Parents,numcompete,cards,firstcards);
     children = [];
     for i = 1:length(winners)/2
@@ -37,7 +40,14 @@ for currentGeneration = 1:generation
         Parents(i) = eliSet(I(i));
     end
     [scoreHistory(currentGeneration), ind] = max(Score);
-    playHistory(currentGeneration) = eliSet(ind);
+    Score(ind) = -Inf;
+    [secondScore, ind2] = max(Score);
+    Score(ind2) = -Inf;
+    [thirdScore, ind3] = max(Score);
+    BestDesign = eliSet(ind);
+    secondDesign = eliSet(ind2);
+    thirdDesign = eliSet(ind3);
+    playHistory(currentGeneration) = BestDesign;
 end
 [value, index] = max(Score)
 
