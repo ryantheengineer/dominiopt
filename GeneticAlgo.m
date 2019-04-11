@@ -1,7 +1,7 @@
 clc;clear;dbstop if error;
-generation = 500;
-population = 30;
-numcompete = 4; % Number of individuals pitted against each other in tournament selection
+generation = 50;
+population = 20;
+numcompete = 3; % Number of individuals pitted against each other in tournament selection
 
 % Initialize cards
 cardlist;

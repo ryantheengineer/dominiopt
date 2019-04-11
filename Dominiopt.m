@@ -4,7 +4,7 @@ function [avg_score_margin] = Dominiopt(gain_priority,gain_cutoffs,play_priority
 % avg_score_margin. Also asks for the strategies to be used by the opposing
 % players, and infers the total number of players from the number of
 % strategies fed in.
-    ngames = 500;
+    ngames = 100;
     numplayers = 4;
     
     player1 = Player(1);
@@ -17,7 +17,7 @@ function [avg_score_margin] = Dominiopt(gain_priority,gain_cutoffs,play_priority
     
     % Create strategies
     strategy1 = Strategy(gain_priority,gain_cutoffs,play_priority,trash_priority);
-    strategy2 = chooseOpponent('BigMoney');
+    strategy2 = chooseOpponent('Spencer');
     strategy3 = chooseOpponent('BigSmithy');
     strategy4 = chooseOpponent('DoubleWitch');
     

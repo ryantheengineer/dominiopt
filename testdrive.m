@@ -3,34 +3,44 @@
 
 clear;
 
+load Run16.mat
+
+winstrategy = eliSet(index);
+
 %% Set up cards
 cardlist;
-cards = [province duchy estate curse gold silver copper village woodcutter smithy festival market bureaucrat witch councilroom moat mine];
-actioncards = [village woodcutter smithy festival market laboratory chapel cellar moat harbinger]; % Is this necessary anymore?
+cards = [province duchy estate curse gold silver copper smithy witch village woodcutter festival market bureaucrat councilroom moat mine];
+actioncards = [smithy witch village woodcutter festival market bureaucrat councilroom moat mine]; % Is this necessary anymore?
 
 %% Set up strategies
-[gain_priority,gain_cutoffs,play_priority,trash_priority] = random_strategy(cards);
-strategy1 = Strategy(gain_priority,gain_cutoffs,play_priority,trash_priority);
-strategy1.gain_priority(1,:) = [1 4 15 2 5 16 8 17 7 3 9 10 11 12 13 14 6]; % Edit this to account for curse card in position 4
-% strategy1.gain_priority(2,:) = [1 1 1 0 1 1 1 0 0 1 0 0 0 0 0 0 1];
-strategy1.gain_cutoffs(3,:) = [12 12 12 0 10 10 10 10 10 10 10 10 10 10 10 10 10];
-strategy1.play_priority = [4 2 1 10 5 6 7 8 9 3];
-strategy1.trash_priority(2,:) = [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0];
+% [gain_priority,gain_cutoffs,play_priority,trash_priority] = random_strategy(cards);
+% strategy1 = Strategy(gain_priority,gain_cutoffs,play_priority,trash_priority);
+% strategy1.gain_priority(1,:) = [1 4 15 2 5 16 8 17 7 3 9 10 11 12 13 14 6]; % Edit this to account for curse card in position 4
+% % strategy1.gain_priority(2,:) = [1 1 1 0 1 1 1 0 0 1 0 0 0 0 0 0 1];
+% strategy1.gain_cutoffs(3,:) = [12 12 12 0 10 10 10 10 10 10 10 10 10 10 10 10 10];
+% strategy1.play_priority = [4 2 1 10 5 6 7 8 9 3];
+% strategy1.trash_priority(2,:) = [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0];
 
-[gain_priority,gain_cutoffs,play_priority,trash_priority] = random_strategy(cards);
-strategy2 = Strategy(gain_priority,gain_cutoffs,play_priority,trash_priority);
+strategy1 = Strategy(winstrategy.gain_priority,winstrategy.gain_cutoffs,winstrategy.play_priority,winstrategy.trash_priority);
 
-strategies = [strategy1,strategy2];
+% [gain_priority,gain_cutoffs,play_priority,trash_priority] = random_strategy(cards);
+strategy2 = chooseOpponent('BigMoney');
+strategy3 = chooseOpponent('BigSmithy');
+strategy4 = chooseOpponent('DoubleWitch');
+
+strategies = [strategy1,strategy2,strategy3,strategy4];
 
 %% Set up players
 player1 = Player(1);
 player2 = Player(2);
+player3 = Player(3);
+player4 = Player(4);
 
-players = [player1,player2];
+players = [player1,player2,player3,player4];
 
 %% Set up and run game simulations
 
-ngames = 100;
+ngames = 500;
 [avg_score_margin] = Dominion(ngames,players,strategies,cards,firstcards);
 
 str = sprintf('Avg score margin: %0.2f',avg_score_margin);

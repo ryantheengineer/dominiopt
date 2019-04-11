@@ -26,7 +26,7 @@ function interpret_gene(chosen_gene,cards)
                 
             % If cards left constraint, show that
             else
-                gainstr = sprintf('\t %s if a single victory pile or three action piles have less than %d cards left',...
+                gainstr = sprintf('\t %s if a single victory pile or three action piles have %d or less cards left',...
                     cards(Igain).name, chosen_gene.gain_cutoffs(3,Igain));
                 disp(gainstr);
                 
