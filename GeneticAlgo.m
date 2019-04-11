@@ -1,11 +1,11 @@
 clc;clear;dbstop if error;
-generation = 50;
-population = 20;
-numcompete = 3; % Number of individuals pitted against each other in tournament selection
+generation = 5;
+population = 5;
+numcompete = 2; % Number of individuals pitted against each other in tournament selection
 
 % Initialize cards
 cardlist;
-cards = [province duchy estate curse gold silver copper smithy witch village woodcutter festival market bureaucrat councilroom moat mine];
+cards = [province duchy estate curse gold silver copper smithy witch village woodcutter festival market bureaucrat councilroom moat chapel];
 
 
 % generate initial parents

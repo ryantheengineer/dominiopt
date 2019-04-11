@@ -21,13 +21,16 @@ function [avg_score_margin] = Dominion(ngames,players,strategies,cards,firstcard
         else
             minMargins(i) = min(Margins(i,:));
         end
+        game.clear_game;
     end
     
 %     Margins;
     % Calculate the average score margin for the number of simulations
     % performed
     
+%     histogram(minMargins);
     avg_score_margin = mean(minMargins);
+    
     
 end
 

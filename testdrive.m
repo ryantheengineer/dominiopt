@@ -3,9 +3,9 @@
 
 clear;
 
-load Run16.mat
+load Run23.mat
 
-winstrategy = eliSet(index);
+winstrategy = playHistory(1);
 
 %% Set up cards
 cardlist;
@@ -25,22 +25,22 @@ strategy1 = Strategy(winstrategy.gain_priority,winstrategy.gain_cutoffs,winstrat
 
 % [gain_priority,gain_cutoffs,play_priority,trash_priority] = random_strategy(cards);
 strategy2 = chooseOpponent('BigMoney');
-strategy3 = chooseOpponent('BigSmithy');
-strategy4 = chooseOpponent('DoubleWitch');
+% strategy3 = chooseOpponent('BigSmithy');
+% strategy4 = chooseOpponent('DoubleWitch');
 
-strategies = [strategy1,strategy2,strategy3,strategy4];
+strategies = [strategy1,strategy2];
 
 %% Set up players
 player1 = Player(1);
 player2 = Player(2);
-player3 = Player(3);
-player4 = Player(4);
+% player3 = Player(3);
+% player4 = Player(4);
 
-players = [player1,player2,player3,player4];
+players = [player1,player2];
 
 %% Set up and run game simulations
 
-ngames = 500;
+ngames = 100;
 [avg_score_margin] = Dominion(ngames,players,strategies,cards,firstcards);
 
 str = sprintf('Avg score margin: %0.2f',avg_score_margin);

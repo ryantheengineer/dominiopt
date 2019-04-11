@@ -41,6 +41,20 @@ classdef Game < handle
             end
         end
         
+        function clear_game(obj)
+            % Clear all player cards in the game object so it's ready for
+            % another simulation
+            for i = 1:length(obj.players)
+                obj.players(i).hand = [];
+                obj.players(i).drawpile = [];
+                obj.players(i).discard = [];
+                obj.players(i).tableau = [];
+            end
+            
+            % Reset cardcounts
+            obj.cardcounts = [12 12 12 30 30 40 40 10 10 10 10 10 10 10 10 10 10];
+        end
+        
         function [gameover] = isgameover(obj)
             % Return true if either a single pile of victory cards is gone,
             % or if any 3 other piles are gone
