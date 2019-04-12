@@ -1,5 +1,5 @@
 clc;clear;dbstop if error;
-generation = 5;
+generation = 10;
 population = 5;
 numcompete = 2; % Number of individuals pitted against each other in tournament selection
 

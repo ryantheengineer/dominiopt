@@ -67,6 +67,24 @@ classdef Player < handle
 
         
         function initialize(obj,firstcards)
+            % If any of the player properties are not empty, then make them
+            % empty
+            if ~isempty(obj.hand)
+                obj.hand = [];
+            end
+            
+            if ~isempty(obj.drawpile)
+                obj.drawpile = [];
+            end
+            
+            if ~isempty(obj.discard)
+                obj.discard = [];
+            end
+            
+            if ~isempty(obj.tableau)
+                obj.tableau = [];
+            end
+            
             % Initialize with 7 Copper and 3 Estate cards. firstcards must
             % be a 1x2 array with copper first and estate second.
             drawpile_0 = repelem(firstcards,[7,3]);

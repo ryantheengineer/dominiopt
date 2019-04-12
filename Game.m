@@ -39,18 +39,10 @@ classdef Game < handle
             for i = 1:length(Players)
                 Players(i).initialize(firstcards);
             end
+            
         end
         
-        function clear_game(obj)
-            % Clear all player cards in the game object so it's ready for
-            % another simulation
-            for i = 1:length(obj.players)
-                obj.players(i).hand = [];
-                obj.players(i).drawpile = [];
-                obj.players(i).discard = [];
-                obj.players(i).tableau = [];
-            end
-            
+        function clear_game(obj)            
             % Reset cardcounts
             obj.cardcounts = [12 12 12 30 30 40 40 10 10 10 10 10 10 10 10 10 10];
         end
@@ -97,13 +89,12 @@ classdef Game < handle
                     Iplay = obj.strategies(playernum).play_priority == i;
                     preferred_action = Actioncards(Iplay);
                     
-                    cardlocs = ismember(obj.players(playernum).hand,preferred_action);
-                    havecard = any(cardlocs);
+                    havecard = sum(obj.players(playernum).hand == preferred_action);
                     
                     % If you have the preferred card in hand, play it (need
                     % to implement checking, in case a new card has been
                     % gained through an action card power)
-                    if havecard == true
+                    if havecard ~= 0
                         chosen_action = preferred_action;
                         obj.players(playernum).play_action(chosen_action);
                         
@@ -397,14 +388,14 @@ classdef Game < handle
                         continue
                     else
                         preferred_trash = obj.cards(Itrash);
-
-                        cardlocs = ismember(obj.players(playernum).hand,preferred_trash);
-                        havecard = any(cardlocs);
+                        havecard = sum(obj.players(playernum).hand == preferred_trash);
+%                         cardlocs = ismember(obj.players(playernum).hand,preferred_trash);
+%                         havecard = any(cardlocs);
 
                         % If you have the preferred card in hand, play it (need
                         % to implement checking, in case a new card has been
                         % gained through an action card power)
-                        if havecard == true
+                        if havecard ~= 0
                             chosen_trash = preferred_trash;
                             obj.players(playernum).trash_card(chosen_trash);
 
