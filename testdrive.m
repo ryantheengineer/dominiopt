@@ -3,11 +3,12 @@
 
 clear;
 
-load Run6new.mat % Load a saved workspace from an optimization run
+load Run6new_long_extension.mat % Load a saved workspace from an optimization run
 
 % can set winstrategy to eliSet(index) to test the optimized strategy, or 
 % use playHistory to choose any design from the optimization history
-winstrategy = playHistory(1); 
+% winstrategy = playHistory(1);
+winstrategy = eliSet(index);
 
 %% Set up cards
 cardlist;
@@ -33,7 +34,7 @@ players = [player1,player2];
 
 %% Set up and run game simulations
 
-ngames = 1000;
+ngames = 10000;
 [avg_score_margin] = Dominion(ngames,players,strategies,cards,firstcards);
 
 str = sprintf('Avg score margin: %0.2f',avg_score_margin);

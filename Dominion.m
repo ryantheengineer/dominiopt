@@ -9,7 +9,7 @@ function [avg_score_margin] = Dominion(ngames,players,strategies,cards,firstcard
     
     % Load a Game object with the players, strategies, and cards
     game = Game(players,strategies,cards);
-    
+    losscount = 0;
     
     for i = 1:ngames
         game.play_game(firstcards);
@@ -21,12 +21,16 @@ function [avg_score_margin] = Dominion(ngames,players,strategies,cards,firstcard
         else
             minMargins(i) = min(Margins(i,:));
         end
+        if minMargins(i) < 0
+            losscount = losscount + 1;
+        end
         game.clear_game;
     end
     
     % Calculate the average score margin for the number of simulations
     % performed    
     histogram(minMargins);
+%     losscount
     avg_score_margin = mean(minMargins);
     
     
